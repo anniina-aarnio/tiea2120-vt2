@@ -16,12 +16,11 @@ reset = false;
 // tätä funktiota kutsutaan automaattisesti käsiteltävällä datalla
 // älä kutsu tätä itse!
 function start(data) {
-	// tästä eteenpäin omaa koodia
-        // vinkki: muunna data ensimmäisen viikkotehtävän tyyppiseksi rakenteeksi
-        // jolloin saat siitä helpommin ja tehokkaammin käsiteltävää
-	//console.log(data);
+
+        // luodaan taulukot, joissa id-avaimella viitteet datan nodeihin
         let sarjat = luoTaulukkoIdeista(data, "sarja");
         let rastit = luoTaulukkoIdeista(data, "rasti");
+        
         // dataa voi tutkia myös osoitteesta: https://appro.mit.jyu.fi/cgi-bin/tiea2120/randomize.cgi
         // huom. datan sisältö muuttuu hieman jokaisella latauskerralla
 	console.log(data.documentElement);
