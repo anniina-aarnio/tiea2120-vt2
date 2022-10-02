@@ -27,7 +27,8 @@ function start(data) {
         console.log(joukkueet);
         
         // luodaan taulukon sisällöt, jotka järjestyksessä ensin sarjan sitten joukkueennimen mukaan
-        luoTaulukonRivit(sarjat, joukkueet);
+        let tulostaulukko = document.getElementById("tulokset");
+        luoTaulukonRivit(tulostaulukko, sarjat, joukkueet);
         // luodaan lista kaikkien rastien koodeista aakkosjärjestyksessä
 
         // luodaan lomake, jolla voi lisätä XML-rakenteeseen uuden rastin
@@ -74,7 +75,15 @@ function luoJoukkueetMap(data) {
         return joukkueet;
 }
 
-function luoTaulukonRivit(sarjat, joukkueet) {
+/**
+ * Lisää uusia rivejä taulukkoon siten, että ne ovat järjestyksessä
+ * ensisijaisesti sarjan nimen mukaan ja
+ * toissijaisesti joukkueen nimen mukaan
+ * @param {Node} taulukkonode johon lisätään uusia rivejä
+ * @param {Map} sarjat
+ * @param {Map} joukkueet
+ */
+function luoTaulukonRivit(taulukkonode, sarjat, joukkueet) {
         // järjestää sarjat aakkosjärjestykseen
         // aakkosjärjestykseen esim. 3 < 20 < kissa1
         let sarjaMap = new Map([...sarjat]
@@ -96,14 +105,32 @@ function luoTaulukonRivit(sarjat, joukkueet) {
         // luodaan uusi rivi taulukkoon
         for (let [sarja, joukkueita] of sarjatJaJoukkueet) {
                 for (let joukkue of joukkueita) {
-                        luoTaulukonRivi(sarjat.get(sarja).textContent, joukkue);
+                        taulukkonode.appendChild(
+                                luoTaulukonRivi(sarjat.get(sarja).textContent, joukkue));
                 }
         }
 
 }
 
+/**
+ * Luo uuden taulukon rivin, johon lisää sisällöksi
+ * 1. sarakkeeseen sarjan nimi
+ * 2. sarakkeeseen joukkueen nimi
+ * @param {String} sarjannimi 
+ * @param {String} joukkueennimi 
+ * @returns uusi rivielementti, jossa mukana sarjannimi ja joukkueennimi omina osinaan
+ */
 function luoTaulukonRivi(sarjannimi, joukkueennimi) {
-        console.log(sarjannimi, joukkueennimi);
+        let rivi = document.createElement("tr");
+        let sarja = document.createElement("td");
+        let joukkue = document.createElement("td");
+
+        sarja.textContent = sarjannimi;
+        joukkue.textContent = joukkueennimi;
+
+        rivi.appendChild(sarja);
+        rivi.appendChild(joukkue);
+        return rivi;     
 }
 
 
