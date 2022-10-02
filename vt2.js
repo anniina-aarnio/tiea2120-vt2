@@ -29,7 +29,10 @@ function start(data) {
         // luodaan taulukon sisällöt, jotka järjestyksessä ensin sarjan sitten joukkueennimen mukaan
         let tulostaulukko = document.getElementById("tulokset");
         luoTaulukonRivit(tulostaulukko, sarjat, joukkueet);
+
         // luodaan lista kaikkien rastien koodeista aakkosjärjestyksessä
+        let lista = document.getElementById("rastit");
+        luoRastilista(lista, rastit);
 
         // luodaan lomake, jolla voi lisätä XML-rakenteeseen uuden rastin
         // documents.forms-rajapinnan kautta
@@ -131,6 +134,10 @@ function luoTaulukonRivi(sarjannimi, joukkueennimi) {
         rivi.appendChild(sarja);
         rivi.appendChild(joukkue);
         return rivi;     
+}
+
+function luoRastilista(ulnode, rastit) {
+        
 }
 
 
