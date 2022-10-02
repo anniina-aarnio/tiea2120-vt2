@@ -137,15 +137,20 @@ function luoTaulukonRivi(sarjannimi, joukkueennimi) {
 }
 
 /**
- * Lisää rivin jokaisesta rastista
+ * Lisää rivin jokaisesta rastista aakkosjärjestyksessä koodin mukaan
  * @param {Node} ulnode 
  * @param {Map} rastit
  */
 function luoRastilista(ulnode, rastit) {
-/*         let aakkosrastit = [...rastit].sort(vertaaKirjaimetEnnenNumeroita); */
-        for (let rasti of rastit.values()) {
+        let aakkosrastit = [...rastit].sort((a,b) => {
+                let akoodi = a[1].getAttribute("koodi");
+                let bkoodi = b[1].getAttribute("koodi");
+                return vertaaKirjaimetEnnenNumeroita(akoodi,bkoodi);
+        });
+        console.log(aakkosrastit);
+        for (let rasti of aakkosrastit.values()) {
                 let rivi = document.createElement("li");
-                rivi.textContent = rasti.getAttribute("koodi");
+                rivi.textContent = rasti[1].getAttribute("koodi");
                 ulnode.appendChild(rivi);
         }
 
@@ -197,20 +202,6 @@ function vertaaKaikkiPienella(a, b) {
 }
 
 /**
- * Vertaa kahta annettua merkkijonoa:
- * kirjaimet tulevat ennen numeroita, isoilla ja pienillä kirjaimilla ei väliä
- * @param {String} a 
- * @param {String} b 
- * @returns -1 jos a ensin, 1 jos b ensin ja 0 jos samat
- */
-function vertaaKirjaimetEnnenNumeroita(a, b) {
-        // onko kirjaimia alussa
-
-        // kaikki pieniksi kirjaimiksi + trim
-        return 0;
-}
-
-/**
  * Käy läpi merkkijonon, ja katsoo onko se vain numeroita
  * Alussa täytyy olla "-" 0-1 kertaa
  * Sitten jokin numero 0-9 vähintään kerran
@@ -228,6 +219,47 @@ function isNumeric(value) {
  * @param {String} testattava
  * @returns {Boolean} true jos String alkaa numerolla, false jos ei
  */
- function alkaakoNumerolla(testattava) {
+function alkaakoNumerolla(testattava) {
         return /^\d/.test(testattava);
- }
+}
+
+/**
+ * Tarkistaa onko merkkijonon alku kirjaimia
+ * @param {String} testattava 
+ */
+function alkaakoKirjaimella(testattava) {
+        return /^[a-z]/.test(testattava);
+}
+ 
+/**
+ * Ottaa parametrikseen kaksi merkkijonoa ja vertaa niitä keskenään.
+ * Numeroilla alkavat merkkijonot ovat kirjaimilla alkavien jälkeen.
+ * Isoilla ja pienillä kirjaimilla ei ole järjestämisessä merkitystä.
+ * @param {String} a 
+ * @param {String} b 
+ * @returns {Number} palauttaa -1 jos a tulee taulukkoon ensin, 1 jos b ja 0 jos sama nimi
+ */
+function vertaaKirjaimetEnnenNumeroita(a, b) {
+
+        // kaikki pieniksi kirjaimiksi
+        let aa = a.trim().toLowerCase();
+        let bb = b.trim().toLowerCase();
+
+        console.log(aa, bb);
+        // alkaako a kirjaimella
+        if (alkaakoKirjaimella(aa)) {
+                // alkaako myös b kirjaimella
+                if (alkaakoKirjaimella(bb)) {
+                        return aa-bb;
+                }
+                // a alkoi, b ei joten a ensin
+                return -1;
+        }
+
+        // a ei alkanut kirjaimella, alkaako b
+        if (alkaakoKirjaimella(bb)) {
+                return 1;
+        }
+
+        return vertaaKaikkiPienella(aa, bb);
+}
