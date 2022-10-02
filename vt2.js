@@ -75,22 +75,36 @@ function luoJoukkueetMap(data) {
 }
 
 function luoTaulukonRivit(sarjat, joukkueet) {
-        // järjestä sarjat aakkosjärjestykseen
-        let sarjalista = [];
-        for (let sarja of sarjat.values()) {
-                console.log(sarja);
-                let nro = sarja.getAttribute("kesto");
-                sarjalista.push(nro + "h");
+        // järjestää sarjat aakkosjärjestykseen
+        // aakkosjärjestykseen esim. 3 < 20 < kissa1
+        let sarjaMap = new Map([...sarjat]
+                .sort((a,b) => vertaaKaikkiPienella(a[1].textContent, b[1].textContent)));
+
+        let sarjatJaJoukkueet = new Map();
+        for (let id of sarjaMap.keys()) {
+                sarjatJaJoukkueet.set(id, []);
         }
-        sarjalista.sort(vertaaKaikkiPienella);
 
+        // lisätään joukkueiden nimet kunkin sarjan listaan ja vaihdetaan aakkosjärjestykseen
+        for (let [nimi, joukkue] of joukkueet) {
+                sarjatJaJoukkueet.get(joukkue.getAttribute("sarja")).push(nimi);
+                sarjatJaJoukkueet.get(joukkue.getAttribute("sarja")).sort(vertaaKaikkiPienella);
+        }
 
-        console.log(sarjalista);
-        // järjestä joukkueet aakkosjärjestykseen
+        console.log(sarjatJaJoukkueet);
 
-        // luo
+        // luodaan uusi rivi taulukkoon
+        for (let [sarja, joukkueita] of sarjatJaJoukkueet) {
+                for (let joukkue of joukkueita) {
+                        luoTaulukonRivi(sarjat.get(sarja).textContent, joukkue);
+                }
+        }
+
 }
 
+function luoTaulukonRivi(sarjannimi, joukkueennimi) {
+        console.log(sarjannimi, joukkueennimi);
+}
 
 
 // ----- OMAT APUFUNKTIOT -----
