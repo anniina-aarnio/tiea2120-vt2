@@ -136,10 +136,20 @@ function luoTaulukonRivi(sarjannimi, joukkueennimi) {
         return rivi;     
 }
 
+/**
+ * Lisää rivin jokaisesta rastista
+ * @param {Node} ulnode 
+ * @param {Map} rastit
+ */
 function luoRastilista(ulnode, rastit) {
-        
-}
+/*         let aakkosrastit = [...rastit].sort(vertaaKirjaimetEnnenNumeroita); */
+        for (let rasti of rastit.values()) {
+                let rivi = document.createElement("li");
+                rivi.textContent = rasti.getAttribute("koodi");
+                ulnode.appendChild(rivi);
+        }
 
+}
 
 // ----- OMAT APUFUNKTIOT -----
 
