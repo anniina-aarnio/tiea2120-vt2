@@ -13,6 +13,7 @@
 
 reset = false;
 
+
 // tätä funktiota kutsutaan automaattisesti käsiteltävällä datalla
 // älä kutsu tätä itse!
 function start(data) {
@@ -31,14 +32,17 @@ function start(data) {
         luoTaulukonRivit(tulostaulukko, sarjat, joukkueet);
 
         // luodaan lista kaikkien rastien koodeista aakkosjärjestyksessä
-        let lista = document.getElementById("rastit");
-        luoRastilista(lista, rastit);
+        let rastilista = document.getElementById("rastit");
+        luoRastilista(rastilista, rastit);
 
         // luodaan lomake, jolla voi lisätä XML-rakenteeseen uuden rastin
         // documents.forms-rajapinnan kautta
         let rastinLisays = document.forms["lisaaRasti"];
         console.log(rastinLisays);
-        rastinLisays["lisaa"].addEventListener('click', tarkista_oikeellisuus);
+        rastinLisays["lisaa"].addEventListener('click', function() {
+                tarkista_oikeellisuus(rastit);
+                paivitaRastilista(rastilista, rastit);
+        });
 
         // dataa voi tutkia myös osoitteesta: https://appro.mit.jyu.fi/cgi-bin/tiea2120/randomize.cgi
         // huom. datan sisältö muuttuu hieman jokaisella latauskerralla
@@ -158,29 +162,63 @@ function luoRastilista(ulnode, rastit) {
 
 }
 
+function paivitaRastilista(ulnode, rastit) {
+        while (ulnode.firstChild) {
+                ulnode.firstChild.remove();
+        }
+        console.log(ulnode);
+        luoRastilista(ulnode, rastit);
+}
+
 /**
  * Tarkistaa, onko lomakkeen sisällöt sellaisia että ne voi lähettää
  * Jos ei ole, mitään ei tapahdu
  * Jos on, rasti lisätään listaan, lista päivittyy, sivu päivittyy ja lomake tyhjenee
- * @param {Event} e 
+ * TÄLLÄ HETKELLÄ SAMOILLA TIEDOILLA VOI LISÄTÄ MONTA RASTIA!
+ * @param {Map} rastit
  */
-function tarkista_oikeellisuus(e) {
-        e.preventDefault();
+function tarkista_oikeellisuus(rastit) {
+        //e.preventDefault();
         // inputtien tekstit
         let lat = document.forms["lisaaRasti"]["lat"].value;
         let lon = document.forms["lisaaRasti"]["lon"].value;
         let koodi = document.forms["lisaaRasti"]["koodi"].value;
 
-        console.log(Number(lat), Number(lon));
         if (koodi.trim() === "" || isNaN(lat)|| isNaN(lon)) {
                 return;
         }
+
+        let uusiID = 0;
+        for (let id of rastit.keys()) {
+                if (uusiID < parseInt(id)) {
+                        uusiID = parseInt(id);
+                }
+        }
+        uusiID += 1;
+
         let rasti = {
-                "lat": parseFloat(lat),
-                "lon": parseFloat(lon),
-                "koodi": koodi
+                "lat": lat,
+                "lon": lon,
+                "koodi": koodi,
+                "id": String(uusiID)
         };
-        console.log(rasti);
+
+        lisaa_rasti(rasti, rastit);
+}
+
+/**
+ * Olettaa, että rasti on oikeaa muotoa, eli
+ * {"lat": float, "lon": float, "koodi": rastinkoodinimi}
+ * @param {Object} rasti 
+ * @param {Map} rastit
+ */
+function lisaa_rasti(rasti, rastit) {
+        let uusirasti = document.createElement("rasti");
+        uusirasti.setAttribute("id", rasti.id);
+        uusirasti.setAttribute("koodi", rasti.koodi);
+        uusirasti.setAttribute("lat", rasti.lat);
+        uusirasti.setAttribute("lon", rasti.lon);
+        rastit = rastit.set(rasti.id, uusirasti);
 }
 
 // ----- OMAT APUFUNKTIOT mm. vertailuun-----
