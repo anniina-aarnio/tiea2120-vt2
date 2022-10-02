@@ -97,8 +97,10 @@ function luoTaulukonRivit(sarjat, joukkueet) {
 
 /**
  * Vertaa kahta annettua merkkijonoa:
- * muuntaa kaikki pieniksi kirjaimiksi ja vertaa sen jälkeen
- * esim. 2h < 4h < Kissa < kissab = KiSsAB
+ * - muuntaa kaikki pieniksi kirjaimiksi ja vertaa sen jälkeen
+ * - ottaa huomioon, jos alussa on numeroita, että ne tulevat numerojärjestykseen
+ * - ei ota huomioon keskellä olevia numeroita numeroina vaan merkkeinä
+ * esim. 2h < 4h < 20h < Kissa < kissab = KiSsAB
  * @param {String} a 
  * @param {String} b
  * @return -1 jos a ensin, 1 jos b ensin, 0 jos samat 
