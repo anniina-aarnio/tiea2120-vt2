@@ -36,6 +36,9 @@ function start(data) {
 
         // luodaan lomake, jolla voi lisätä XML-rakenteeseen uuden rastin
         // documents.forms-rajapinnan kautta
+        let rastinLisays = document.forms["lisaaRasti"];
+        console.log(rastinLisays);
+        rastinLisays["lisaa"].addEventListener('click', tarkista_oikeellisuus);
 
         // dataa voi tutkia myös osoitteesta: https://appro.mit.jyu.fi/cgi-bin/tiea2120/randomize.cgi
         // huom. datan sisältö muuttuu hieman jokaisella latauskerralla
@@ -147,7 +150,6 @@ function luoRastilista(ulnode, rastit) {
                 let bkoodi = b[1].getAttribute("koodi");
                 return vertaaKirjaimetEnnenNumeroita(akoodi,bkoodi);
         });
-        console.log(aakkosrastit);
         for (let rasti of aakkosrastit.values()) {
                 let rivi = document.createElement("li");
                 rivi.textContent = rasti[1].getAttribute("koodi");
@@ -156,7 +158,32 @@ function luoRastilista(ulnode, rastit) {
 
 }
 
-// ----- OMAT APUFUNKTIOT -----
+/**
+ * Tarkistaa, onko lomakkeen sisällöt sellaisia että ne voi lähettää
+ * Jos ei ole, mitään ei tapahdu
+ * Jos on, rasti lisätään listaan, lista päivittyy, sivu päivittyy ja lomake tyhjenee
+ * @param {Event} e 
+ */
+function tarkista_oikeellisuus(e) {
+        e.preventDefault();
+        // inputtien tekstit
+        let lat = document.forms["lisaaRasti"]["lat"].value;
+        let lon = document.forms["lisaaRasti"]["lon"].value;
+        let koodi = document.forms["lisaaRasti"]["koodi"].value;
+
+        console.log(Number(lat), Number(lon));
+        if (koodi.trim() === "" || isNaN(lat)|| isNaN(lon)) {
+                return;
+        }
+        let rasti = {
+                "lat": parseFloat(lat),
+                "lon": parseFloat(lon),
+                "koodi": koodi
+        };
+        console.log(rasti);
+}
+
+// ----- OMAT APUFUNKTIOT mm. vertailuun-----
 
 /**
  * Vertaa kahta annettua merkkijonoa:
@@ -245,7 +272,6 @@ function vertaaKirjaimetEnnenNumeroita(a, b) {
         let aa = a.trim().toLowerCase();
         let bb = b.trim().toLowerCase();
 
-        console.log(aa, bb);
         // alkaako a kirjaimella
         if (alkaakoKirjaimella(aa)) {
                 // alkaako myös b kirjaimella
