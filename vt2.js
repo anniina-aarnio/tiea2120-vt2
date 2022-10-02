@@ -77,10 +77,15 @@ function luoJoukkueetMap(data) {
 function luoTaulukonRivit(sarjat, joukkueet) {
         // järjestä sarjat aakkosjärjestykseen
         let sarjalista = [];
-        for (let sarja in sarjat) {
-                sarjalista.push(sarja);
+        for (let sarja of sarjat.values()) {
+                console.log(sarja);
+                let nro = sarja.getAttribute("kesto");
+                sarjalista.push(nro + "h");
         }
+        sarjalista.sort(vertaaKaikkiPienella);
 
+
+        console.log(sarjalista);
         // järjestä joukkueet aakkosjärjestykseen
 
         // luo
@@ -93,6 +98,7 @@ function luoTaulukonRivit(sarjat, joukkueet) {
 /**
  * Vertaa kahta annettua merkkijonoa:
  * muuntaa kaikki pieniksi kirjaimiksi ja vertaa sen jälkeen
+ * esim. 2h < 4h < Kissa < kissab = KiSsAB
  * @param {String} a 
  * @param {String} b
  * @return -1 jos a ensin, 1 jos b ensin, 0 jos samat 
@@ -102,7 +108,26 @@ function vertaaKaikkiPienella(a, b) {
         let aa = a.toLowerCase().trim();
         let bb = b.toLowerCase().trim();
         
-        // vertaa toisiinsa
+        // jos numeroita alussa
+        if (alkaakoNumerolla(aa)) {
+                // jos myös b:llä numeroita alussa
+                if (alkaakoNumerolla(bb)) {
+                        // muodostetaan numerot
+                        let aalku = parseInt(aa);
+                        let balku = parseInt(bb);
+
+                        // jos numerot erisuuret
+                        if (aalku != balku) {
+                                return aalku-balku;
+                        }
+                }
+                // jos vain a:lla numeroita alussa
+                else {
+                        return -1;
+                }
+        }
+
+        // vertaa pelkkiä kirjainmerkkijonoja toisiinsa
         if (aa < bb) {
                 return -1;
         } else if (bb < aa) {
@@ -124,3 +149,25 @@ function vertaaKirjaimetEnnenNumeroita(a, b) {
         // kaikki pieniksi kirjaimiksi + trim
         return 0;
 }
+
+/**
+ * Käy läpi merkkijonon, ja katsoo onko se vain numeroita
+ * Alussa täytyy olla "-" 0-1 kertaa
+ * Sitten jokin numero 0-9 vähintään kerran
+ * Kunnes päättyy ($)
+ * 
+ * @param {String} value 
+ * @returns true jos on vain numeroita, false jos ei ole
+ */
+function isNumeric(value) {
+        return /^-{0,1}\d+$/.test(value);
+}
+
+/**
+ * Ottaa parametrikseen yhden String:n ja tarkistaa, alkaako numerolla.
+ * @param {String} testattava
+ * @returns {Boolean} true jos String alkaa numerolla, false jos ei
+ */
+ function alkaakoNumerolla(testattava) {
+        return /^\d/.test(testattava);
+ }
