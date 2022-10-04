@@ -18,6 +18,10 @@ reset = false;
 // älä kutsu tätä itse!
 function start(data) {
 
+        // lisätään lisää-nappiin data, jota voi hyödyntää
+        document.getElementById("lisaa")["data"] = data.firstChild;
+        console.log(document.getElementById("lisaa").data);
+
         // luodaan mapit, joissa id -> node -parit
         let sarjat = luoMapIdeista(data, "sarja");
         let rastit = luoMapIdeista(data, "rasti");
@@ -35,10 +39,13 @@ function start(data) {
         let rastilista = document.getElementById("rastit");
         luoRastilista(rastilista, rastit);
 
+
+
         // luodaan lomake, jolla voi lisätä XML-rakenteeseen uuden rastin
         // documents.forms-rajapinnan kautta
         let rastinLisays = document.forms["lisaaRasti"];
         console.log(rastinLisays);
+
         rastinLisays["lisaa"].addEventListener('click', function() {
                 tarkista_oikeellisuus(rastit);
                 paivitaRastilista(rastilista, rastit);
@@ -49,6 +56,7 @@ function start(data) {
         // savedata tallentaa datan selaimen LocalStorageen. Tee tämä aina, kun
         // ohjelmasi on muuttanut dataa. Seuraavalla sivun latauskerralla
         // saat käyttöösi muuttamasi datan
+        console.log(data.documentElement);
 	savedata(data);
 }
 
@@ -57,6 +65,7 @@ function start(data) {
 /**
  * Luodaan objekti, johon lisätään kyseisellä sanalla etsittyjä
  * nodeja datasta siten, että noden id on objektissa avain ja arvo on viite kyseiseen nodeen
+ * Lisää myös viitteen datasta, jotta lisääminen yms. onnistuu muualla helposti
  * @param {XMLDocument} data
  * @param {String} hakusana etsittävän sanan perusteella
  * @return {Object} objekti, jossa kyseisellä sanalla tägätyt nodet 
@@ -74,6 +83,7 @@ function luoMapIdeista(data, hakusana) {
 /**
  * Luodaan objekti, johon lisätään joukkuenodet datasta siten, että
  * joukkueen nimi on objektissa avain ja arvo on viite kyseiseen nodeen
+ * Lisää myös viitteen datasta, jotta lisääminen yms. onnistuu muualla helposti
  * @param {XMLDocument} data
  * @return {Map} objekti, jossa joukkueet nimi -> node -pareina
  */
@@ -96,6 +106,7 @@ function luoJoukkueetMap(data) {
 function luoTaulukonRivit(taulukkonode, sarjat, joukkueet) {
         // järjestää sarjat aakkosjärjestykseen
         // aakkosjärjestykseen esim. 3 < 20 < kissa1
+        // TODO: AAKKOSTAA TÄLLÄ HETKELLÄ VÄÄRIN
         let sarjaMap = new Map([...sarjat]
                 .sort((a,b) => vertaaKaikkiPienella(a[1].textContent, b[1].textContent)));
 
@@ -115,8 +126,7 @@ function luoTaulukonRivit(taulukkonode, sarjat, joukkueet) {
         // luodaan uusi rivi taulukkoon
         for (let [sarja, joukkueita] of sarjatJaJoukkueet) {
                 for (let joukkue of joukkueita) {
-                        taulukkonode.appendChild(
-                                luoTaulukonRivi(sarjat.get(sarja).textContent, joukkue));
+                        taulukkonode.appendChild(luoTaulukonRivi(sarjat.get(sarja).textContent, joukkue));
                 }
         }
 
@@ -162,6 +172,10 @@ function luoRastilista(ulnode, rastit) {
 
 }
 
+/**
+ * @param {Node} ulnode johon lisätään 
+ * @param {Map} rastit 
+ */
 function paivitaRastilista(ulnode, rastit) {
         while (ulnode.firstChild) {
                 ulnode.firstChild.remove();
@@ -213,11 +227,15 @@ function tarkista_oikeellisuus(rastit) {
  * @param {Map} rastit
  */
 function lisaa_rasti(rasti, rastit) {
-        let uusirasti = document.createElement("rasti");
+
+        let uusirasti = document.getElementById("lisaa").data.createElement("rasti");
         uusirasti.setAttribute("id", rasti.id);
         uusirasti.setAttribute("koodi", rasti.koodi);
         uusirasti.setAttribute("lat", rasti.lat);
         uusirasti.setAttribute("lon", rasti.lon);
+        data = document.getElementById("lisaa").data;
+
+        data.getElementsByTagName("rastit").appendChild(uusirasti);
         rastit = rastit.set(rasti.id, uusirasti);
 }
 
@@ -234,6 +252,7 @@ function lisaa_rasti(rasti, rastit) {
  * @return -1 jos a ensin, 1 jos b ensin, 0 jos samat 
  */
 function vertaaKaikkiPienella(a, b) {
+
         // muutetaan kaikki kirjaimet pieniksi + whitespacet pois alusta ja lopusta
         let aa = a.toLowerCase().trim();
         let bb = b.toLowerCase().trim();
@@ -314,7 +333,7 @@ function vertaaKirjaimetEnnenNumeroita(a, b) {
         if (alkaakoKirjaimella(aa)) {
                 // alkaako myös b kirjaimella
                 if (alkaakoKirjaimella(bb)) {
-                        return aa-bb;
+                        return aa - bb;
                 }
                 // a alkoi, b ei joten a ensin
                 return -1;
