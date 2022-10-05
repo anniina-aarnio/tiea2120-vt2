@@ -1,4 +1,10 @@
+/* tablen tyylittelyt */
+
+/* formin tyylittelyt */
 form {
+/*     border-width: 3px;
+    border: solid #d69c52;
+    padding: 1em; */
     background-color: #fcfffc;
     display: block;
     width: fit-content;
