@@ -18,18 +18,17 @@ reset = false;
 // älä kutsu tätä itse!
 function start(data) {
 
-        // lisätään lisää-nappiin data, jota voi hyödyntää
-        document.getElementById("lisaa")["data"] = data.firstChild;
-        console.log(document.getElementById("lisaa").data);
+        // lisätään lisää-nappiin data, jota voi hyödyntää muuallakin
+        document.getElementById("lisaa").data = data;
 
         // luodaan mapit, joissa id -> node -parit
         let sarjat = luoMapIdeista(data, "sarja");
         let rastit = luoMapIdeista(data, "rasti");
         // luodaan map, jossa joukkueet nimi -> node -pareina
         let joukkueet = luoJoukkueetMap(data);
-        console.log(sarjat);
+/*         console.log(sarjat);
         console.log(rastit);
-        console.log(joukkueet);
+        console.log(joukkueet); */
         
         // luodaan taulukon sisällöt, jotka järjestyksessä ensin sarjan sitten joukkueennimen mukaan
         let tulostaulukko = document.getElementById("tulokset");
@@ -44,7 +43,6 @@ function start(data) {
         // luodaan lomake, jolla voi lisätä XML-rakenteeseen uuden rastin
         // documents.forms-rajapinnan kautta
         let rastinLisays = document.forms["lisaaRasti"];
-        console.log(rastinLisays);
 
         rastinLisays["lisaa"].addEventListener('click', function() {
                 tarkista_oikeellisuus(rastit);
@@ -221,21 +219,30 @@ function tarkista_oikeellisuus(rastit) {
 }
 
 /**
+ * Luo rasti-elementin annetun rasti-objektin tiedoilla
+ * ja lisää sen dataan.
  * Olettaa, että rasti on oikeaa muotoa, eli
  * {"lat": float, "lon": float, "koodi": rastinkoodinimi}
  * @param {Object} rasti 
  * @param {Map} rastit
  */
 function lisaa_rasti(rasti, rastit) {
+        // viite datasta talteen käyttöä varten
+        let data = document.getElementById("lisaa").data;
+        console.log(data);
 
-        let uusirasti = document.getElementById("lisaa").data.createElement("rasti");
+        let uusirasti = data.createElement("rasti");
         uusirasti.setAttribute("id", rasti.id);
         uusirasti.setAttribute("koodi", rasti.koodi);
         uusirasti.setAttribute("lat", rasti.lat);
         uusirasti.setAttribute("lon", rasti.lon);
-        data = document.getElementById("lisaa").data;
 
-        data.getElementsByTagName("rastit").appendChild(uusirasti);
+        let paikka = data.getElementsByTagName("rastit");
+        paikka[0].appendChild(uusirasti);
+        console.log("miltä näyttää?");
+        console.log(paikka);
+
+
         rastit = rastit.set(rasti.id, uusirasti);
 }
 
