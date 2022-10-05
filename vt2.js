@@ -26,9 +26,9 @@ function start(data) {
         let rastit = luoMapIdeista(data, "rasti");
         // luodaan map, jossa joukkueet nimi -> node -pareina
         let joukkueet = luoJoukkueetMap(data);
-/*         console.log(sarjat);
+        console.log(sarjat);
         console.log(rastit);
-        console.log(joukkueet); */
+        console.log(joukkueet);
         
         // luodaan taulukon sisällöt, jotka järjestyksessä ensin sarjan sitten joukkueennimen mukaan
         let tulostaulukko = document.getElementById("tulokset");
@@ -119,8 +119,6 @@ function luoTaulukonRivit(taulukkonode, sarjat, joukkueet) {
                 sarjatJaJoukkueet.get(joukkue.getAttribute("sarja")).sort(vertaaKaikkiPienella);
         }
 
-        console.log(sarjatJaJoukkueet);
-
         // luodaan uusi rivi taulukkoon
         for (let [sarja, joukkueita] of sarjatJaJoukkueet) {
                 for (let joukkue of joukkueita) {
@@ -178,7 +176,6 @@ function paivitaRastilista(ulnode, rastit) {
         while (ulnode.firstChild) {
                 ulnode.firstChild.remove();
         }
-        console.log(ulnode);
         luoRastilista(ulnode, rastit);
 }
 
@@ -186,7 +183,7 @@ function paivitaRastilista(ulnode, rastit) {
  * Tarkistaa, onko lomakkeen sisällöt sellaisia että ne voi lähettää
  * Jos ei ole, mitään ei tapahdu
  * Jos on, rasti lisätään listaan, lista päivittyy, sivu päivittyy ja lomake tyhjenee
- * TÄLLÄ HETKELLÄ SAMOILLA TIEDOILLA VOI LISÄTÄ MONTA RASTIA!
+ * Katsoo myös, ettei tule kahta samannimistä rastia.
  * @param {Map} rastit
  */
 function tarkista_oikeellisuus(rastit) {
@@ -198,6 +195,13 @@ function tarkista_oikeellisuus(rastit) {
 
         if (koodi.trim() === "" || isNaN(lat)|| isNaN(lon)) {
                 return;
+        }
+
+        // tarkistaa onko samanniminen koodi jo olemassa
+        for (let rasti of rastit) {
+                if (koodi === rasti[1].getAttribute("koodi")) {
+                        return;
+                }
         }
 
         let uusiID = 0;
