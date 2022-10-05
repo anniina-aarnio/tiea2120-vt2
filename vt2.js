@@ -45,7 +45,7 @@ function start(data) {
         let rastinLisays = document.forms["lisaaRasti"];
 
         rastinLisays["lisaa"].addEventListener('click', function() {
-                tarkista_oikeellisuus(rastit);
+                tarkistaOikeellisuus(rastit);
                 paivitaRastilista(rastilista, rastit);
         });
 
@@ -186,7 +186,7 @@ function paivitaRastilista(ulnode, rastit) {
  * Katsoo myös, ettei tule kahta samalla koodilla varustettua rastia.
  * @param {Map} rastit
  */
-function tarkista_oikeellisuus(rastit) {
+function tarkistaOikeellisuus(rastit) {
         //e.preventDefault();
         // inputtien tekstit
         let lat = document.forms["lisaaRasti"]["lat"].value;
