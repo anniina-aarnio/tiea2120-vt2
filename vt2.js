@@ -183,7 +183,7 @@ function paivitaRastilista(ulnode, rastit) {
  * Tarkistaa, onko lomakkeen sisällöt sellaisia että ne voi lähettää
  * Jos ei ole, mitään ei tapahdu
  * Jos on, rasti lisätään listaan, lista päivittyy, sivu päivittyy ja lomake tyhjenee
- * Katsoo myös, ettei tule kahta samannimistä rastia.
+ * Katsoo myös, ettei tule kahta samalla koodilla varustettua rastia.
  * @param {Map} rastit
  */
 function tarkista_oikeellisuus(rastit) {
@@ -199,7 +199,7 @@ function tarkista_oikeellisuus(rastit) {
 
         // tarkistaa onko samanniminen koodi jo olemassa
         for (let rasti of rastit) {
-                if (koodi === rasti[1].getAttribute("koodi")) {
+                if (koodi.toLowerCase() === rasti[1].getAttribute("koodi").toLowerCase()) {
                         return;
                 }
         }
