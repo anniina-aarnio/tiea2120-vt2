@@ -51,7 +51,7 @@ function start(data) {
         rastinLisays["lisaaRastiNappi"].addEventListener('click', function() {
                 if (tarkistaOikeellisuus(rastit)) {
                         paivitaRastilista(rastilista, rastit);
-                        tyhjennaFormi();
+                        tyhjennaFormi("lisaaRasti");
                 }
         });
 
@@ -257,10 +257,18 @@ function lisaaRasti(rasti, rastit) {
 }
 
 /**
- * Onnistuneen lisäyksen jälkeen tyhjentää formin
+ * Onnistuneen lisäyksen jälkeen tyhjentää formin input-text-laatikot
+ * @param {String} forminID formin id
  */
-function tyhjennaFormi() {
-        
+function tyhjennaFormi(forminID) {
+        let elementit = document.forms[forminID].elements;
+
+        for (let e of elementit) {
+                if (e.nodeName === "input" && e.type === "text") {
+                        e.value = "";
+                }
+        }
+        console.log(elementit);
 }
 
 // ----- OMAT APUFUNKTIOT mm. vertailuun-----
