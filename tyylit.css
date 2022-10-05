@@ -1,0 +1,20 @@
+form {
+    background-color: #fcfffc;
+    display: block;
+    width: fit-content;
+}
+
+input {
+    border: solid #a5a8a4;
+    border-width: 1px;
+}
+
+form input[type="text"] {
+    margin-left: 1em;
+    float: right;
+}
+
+form label {
+    display: inline-block;
+    min-width: 6em;
+}
