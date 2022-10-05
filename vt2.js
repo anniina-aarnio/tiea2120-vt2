@@ -159,7 +159,7 @@ function luoTaulukonRivi(sarjannimi, joukkue) {
         let rivi = document.createElement("tr");
         let sarja = document.createElement("td");
         let joukkueTekstit = document.createElement("td");
-        let joukkuenimi = document.createTextNode(joukkue.lastChild.textContent);
+        let joukkuenimi = document.createElement("a");
         let jasenet = document.createElement("ul");
 
         sarja.textContent = sarjannimi;
@@ -170,6 +170,7 @@ function luoTaulukonRivi(sarjannimi, joukkue) {
                 jasenet.appendChild(osa);
         }
 
+        joukkuenimi.textContent = joukkue.lastChild.textContent;
         joukkueTekstit.appendChild(joukkuenimi);
         joukkueTekstit.appendChild(jasenet);
 

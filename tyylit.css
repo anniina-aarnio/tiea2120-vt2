@@ -10,8 +10,24 @@ tr th {
     text-align: left;
 }
 
+td > a {
+    display: block;
+}
 td > ul {
     display: inline;
+    padding: 0;
+}
+
+td > ul li {
+    display: inline;
+}
+
+td > ul li:after {
+    content: ", ";
+}
+
+td > ul li:last-child::after {
+    content: "";
 }
 
 /* formin tyylittelyt */
