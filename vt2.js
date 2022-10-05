@@ -19,7 +19,7 @@ reset = false;
 function start(data) {
 
         // lisätään lisää-nappiin data, jota voi hyödyntää muuallakin
-        let nappi = document.getElementById("lisaa");
+        let nappi = document.getElementById("lisaaRastiNappi");
         nappi.data = data;
 
         // luodaan mapit, joissa id -> node -parit
@@ -48,7 +48,7 @@ function start(data) {
         // documents.forms-rajapinnan kautta
         let rastinLisays = document.forms["lisaaRasti"];
 
-        rastinLisays["lisaa"].addEventListener('click', function() {
+        rastinLisays["lisaaRastiNappi"].addEventListener('click', function() {
                 if (tarkistaOikeellisuus(rastit)) {
                         paivitaRastilista(rastilista, rastit);
                         tyhjennaFormi();
@@ -228,7 +228,7 @@ function tarkistaOikeellisuus(rastit) {
                 "id": String(uusiID)
         };
 
-        lisaa_rasti(rasti, rastit);
+        lisaaRasti(rasti, rastit);
         return true;
 }
 
@@ -240,9 +240,9 @@ function tarkistaOikeellisuus(rastit) {
  * @param {Object} rasti 
  * @param {Map} rastit
  */
-function lisaa_rasti(rasti, rastit) {
+function lisaaRasti(rasti, rastit) {
         // viite datasta talteen käyttöä varten
-        let data = document.getElementById("lisaa").data;
+        let data = document.getElementById("lisaaRastiNappi").data;
 
         let uusirasti = data.createElement("rasti");
         uusirasti.setAttribute("id", rasti.id);
@@ -260,7 +260,7 @@ function lisaa_rasti(rasti, rastit) {
  * Onnistuneen lisäyksen jälkeen tyhjentää formin
  */
 function tyhjennaFormi() {
-
+        
 }
 
 // ----- OMAT APUFUNKTIOT mm. vertailuun-----
