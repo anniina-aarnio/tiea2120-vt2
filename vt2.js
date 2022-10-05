@@ -19,13 +19,17 @@ reset = false;
 function start(data) {
 
         // lisätään lisää-nappiin data, jota voi hyödyntää muuallakin
-        document.getElementById("lisaa").data = data;
+        let nappi = document.getElementById("lisaa");
+        nappi.data = data;
 
         // luodaan mapit, joissa id -> node -parit
         let sarjat = luoMapIdeista(data, "sarja");
         let rastit = luoMapIdeista(data, "rasti");
         // luodaan map, jossa joukkueet nimi -> node -pareina
         let joukkueet = luoJoukkueetMap(data);
+        nappi.sarjat = sarjat;
+        nappi.rastit = rastit;
+        nappi.joukkueet = joukkueet;
         console.log(sarjat);
         console.log(rastit);
         console.log(joukkueet);
@@ -45,8 +49,10 @@ function start(data) {
         let rastinLisays = document.forms["lisaaRasti"];
 
         rastinLisays["lisaa"].addEventListener('click', function() {
-                tarkistaOikeellisuus(rastit);
-                paivitaRastilista(rastilista, rastit);
+                if (tarkistaOikeellisuus(rastit)) {
+                        paivitaRastilista(rastilista, rastit);
+                        tyhjennaFormi();
+                }
         });
 
         // dataa voi tutkia myös osoitteesta: https://appro.mit.jyu.fi/cgi-bin/tiea2120/randomize.cgi
@@ -187,6 +193,7 @@ function paivitaRastilista(ulnode, rastit) {
  * Jos on, rasti lisätään listaan, lista päivittyy, sivu päivittyy ja lomake tyhjenee
  * Katsoo myös, ettei tule kahta samalla koodilla varustettua rastia.
  * @param {Map} rastit
+ * @return {Boolean} true, jos rasti lisätään, false jos ei
  */
 function tarkistaOikeellisuus(rastit) {
         //e.preventDefault();
@@ -196,13 +203,13 @@ function tarkistaOikeellisuus(rastit) {
         let koodi = document.forms["lisaaRasti"]["koodi"].value;
 
         if (koodi.trim() === "" || isNaN(lat)|| isNaN(lon)) {
-                return;
+                return false;
         }
 
         // tarkistaa onko samanniminen koodi jo olemassa
         for (let rasti of rastit) {
                 if (koodi.toLowerCase() === rasti[1].getAttribute("koodi").toLowerCase()) {
-                        return;
+                        return false;
                 }
         }
 
@@ -222,6 +229,7 @@ function tarkistaOikeellisuus(rastit) {
         };
 
         lisaa_rasti(rasti, rastit);
+        return true;
 }
 
 /**
@@ -246,6 +254,13 @@ function lisaa_rasti(rasti, rastit) {
         paikka[0].appendChild(uusirasti);
 
         rastit = rastit.set(rasti.id, uusirasti);
+}
+
+/**
+ * Onnistuneen lisäyksen jälkeen tyhjentää formin
+ */
+function tyhjennaFormi() {
+
 }
 
 // ----- OMAT APUFUNKTIOT mm. vertailuun-----
