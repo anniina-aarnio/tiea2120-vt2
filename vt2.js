@@ -169,6 +169,8 @@ function luoRastilista(ulnode, rastit) {
 }
 
 /**
+ * Päivittää rastilistan poistamalla ensin kaikki ul:n li:t
+ * Luo sitten uuden rastilistan tiedoilla, joissa jotain muutoksia
  * @param {Node} ulnode johon lisätään 
  * @param {Map} rastit 
  */

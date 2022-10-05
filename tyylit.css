@@ -1,0 +1,32 @@
+form {
+    display: block;
+}
+
+fieldset {
+    border-color: #ccc;
+    border-width: 1px;
+}
+
+div > form > fieldset > label {
+    font-weight: bold;
+    padding: 0.4em 0em;
+}
+
+div > form > fieldset > label input {
+    float: right;
+}
+
+input[name^="j"] {
+    margin-bottom: 0.1em;
+    margin-left: 0.4em;
+}
+
+fieldset > fieldset {
+    border: none;
+    padding: 0.6em;
+}
+
+fieldset > fieldset legend {
+    font-weight: bold;
+    margin-top: 1em;
+}
