@@ -1,4 +1,18 @@
 /* tablen tyylittelyt */
+table {
+    background-color: #fcfffc;
+    border-collapse: collapse;
+    border: 1px dotted black;
+    width: 100%;
+}
+
+tr th {
+    text-align: left;
+}
+
+td > ul {
+    display: inline;
+}
 
 /* formin tyylittelyt */
 form {

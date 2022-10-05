@@ -11,7 +11,7 @@
 // testaa sovellusta molemmilla arvoilla
 // localStoragen voi myös itse tyhjentää Storage-välilehden kautta
 
-reset = false;
+reset = true;
 
 
 // tätä funktiota kutsutaan automaattisesti käsiteltävällä datalla
@@ -110,7 +110,6 @@ function luoJoukkueetMap(data) {
 function luoTaulukonRivit(taulukkonode, sarjat, joukkueet) {
         // järjestää sarjat aakkosjärjestykseen
         // aakkosjärjestykseen esim. 3 < 20 < kissa1
-        // TODO: AAKKOSTAA TÄLLÄ HETKELLÄ VÄÄRIN
         let sarjaMap = new Map([...sarjat]
                 .sort((a,b) => vertaaKaikkiPienella(a[1].textContent, b[1].textContent)));
 
@@ -120,9 +119,13 @@ function luoTaulukonRivit(taulukkonode, sarjat, joukkueet) {
         }
 
         // lisätään joukkueiden nimet kunkin sarjan listaan ja vaihdetaan aakkosjärjestykseen
-        for (let [nimi, joukkue] of joukkueet) {
-                sarjatJaJoukkueet.get(joukkue.getAttribute("sarja")).push(nimi);
-                sarjatJaJoukkueet.get(joukkue.getAttribute("sarja")).sort(vertaaKaikkiPienella);
+        for (let joukkue of joukkueet.values()) {
+                sarjatJaJoukkueet.get(joukkue.getAttribute("sarja")).push(joukkue);
+        }
+
+        // aakkostaa joukkuelistat
+        for (let joukkue of sarjatJaJoukkueet.values()) {
+                aakkosta(joukkue);
         }
 
         // luodaan uusi rivi taulukkoon
@@ -135,23 +138,43 @@ function luoTaulukonRivit(taulukkonode, sarjat, joukkueet) {
 }
 
 /**
+ * Aakkostaa joukkuelistan joukkueen nimien mukaan
+ * Joukkuelistassa joukkueiden täytyy olla nodeja
+ * @param {Array} joukkuelista 
+ */
+function aakkosta(joukkuelista) {
+        joukkuelista.sort((a,b) => vertaaKaikkiPienella(a.lastElementChild.textContent,
+                b.lastElementChild.textContent));
+}
+
+/**
  * Luo uuden taulukon rivin, johon lisää sisällöksi
  * 1. sarakkeeseen sarjan nimi
  * 2. sarakkeeseen joukkueen nimi
  * @param {String} sarjannimi 
- * @param {String} joukkueennimi 
+ * @param {Element} joukkue
  * @returns uusi rivielementti, jossa mukana sarjannimi ja joukkueennimi omina osinaan
  */
-function luoTaulukonRivi(sarjannimi, joukkueennimi) {
+function luoTaulukonRivi(sarjannimi, joukkue) {
         let rivi = document.createElement("tr");
         let sarja = document.createElement("td");
-        let joukkue = document.createElement("td");
+        let joukkueTekstit = document.createElement("td");
+        let joukkuenimi = document.createTextNode(joukkue.lastChild.textContent);
+        let jasenet = document.createElement("ul");
 
         sarja.textContent = sarjannimi;
-        joukkue.textContent = joukkueennimi;
+
+        for (let jasen of joukkue.firstChild.childNodes) {
+                let osa = document.createElement("li");
+                osa.textContent = jasen.firstChild.textContent;
+                jasenet.appendChild(osa);
+        }
+
+        joukkueTekstit.appendChild(joukkuenimi);
+        joukkueTekstit.appendChild(jasenet);
 
         rivi.appendChild(sarja);
-        rivi.appendChild(joukkue);
+        rivi.appendChild(joukkueTekstit);
         return rivi;     
 }
 
@@ -185,6 +208,7 @@ function paivitaRastilista(ulnode, rastit) {
                 ulnode.firstChild.remove();
         }
         luoRastilista(ulnode, rastit);
+        savedata(document.getElementById("listaaRastiNappi").data);
 }
 
 /**
