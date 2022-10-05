@@ -229,7 +229,6 @@ function tarkista_oikeellisuus(rastit) {
 function lisaa_rasti(rasti, rastit) {
         // viite datasta talteen käyttöä varten
         let data = document.getElementById("lisaa").data;
-        console.log(data);
 
         let uusirasti = data.createElement("rasti");
         uusirasti.setAttribute("id", rasti.id);
@@ -239,9 +238,6 @@ function lisaa_rasti(rasti, rastit) {
 
         let paikka = data.getElementsByTagName("rastit");
         paikka[0].appendChild(uusirasti);
-        console.log("miltä näyttää?");
-        console.log(paikka);
-
 
         rastit = rastit.set(rasti.id, uusirasti);
 }
@@ -319,7 +315,7 @@ function alkaakoNumerolla(testattava) {
  * @param {String} testattava 
  */
 function alkaakoKirjaimella(testattava) {
-        return /^[a-z]/.test(testattava);
+        return /^\D/.test(testattava);
 }
  
 /**
@@ -340,7 +336,13 @@ function vertaaKirjaimetEnnenNumeroita(a, b) {
         if (alkaakoKirjaimella(aa)) {
                 // alkaako myös b kirjaimella
                 if (alkaakoKirjaimella(bb)) {
-                        return aa - bb;
+                        if (aa < bb) {
+                                return -1;
+                        }
+                        if (bb < aa) {
+                                return 1;
+                        }
+                        return 0;
                 }
                 // a alkoi, b ei joten a ensin
                 return -1;
