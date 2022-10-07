@@ -166,9 +166,8 @@ function luoTyhjaJoukkueenLisays(formi) {
         }
 
         // jäsenluettelon muokkaaminen
-        formi["jasenkysely"].appendChild(luoJasenLabelJaInput(10));
-
-        // yli kahden 
+        formi["jasenkysely"].appendChild(luoJasenLabelJaInput(1));
+        formi["jasenkysely"].appendChild(luoJasenLabelJaInput(2));
 }
 
 /**
