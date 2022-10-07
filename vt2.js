@@ -42,18 +42,21 @@ function start(data) {
         let rastilista = document.getElementById("rastit");
         luoRastilista(rastilista, rastit);
 
-
-
         // luodaan lomake, jolla voi lisätä XML-rakenteeseen uuden rastin
         // documents.forms-rajapinnan kautta
         let rastinLisays = document.forms["lisaaRasti"];
 
-        rastinLisays["lisaaRastiNappi"].addEventListener('click', function() {
+/*         rastinLisays["lisaaRastiNappi"].addEventListener('click', function() {
                 if (tarkistaOikeellisuus(rastit)) {
                         paivitaRastilista(rastilista, rastit);
                         tyhjennaFormi("lisaaRasti");
                 }
-        });
+        }); */
+        rastinLisays["lisaaRastiNappi"].addEventListener('click', rastinLisaysTapahtuma);
+
+        let joukkueenLisays = document.forms["lisaaJoukkue"];
+        joukkueenLisays["lisaaJoukkueNappi"].addEventListener('click', joukkueenLisaysTapahtuma);
+
 
         // dataa voi tutkia myös osoitteesta: https://appro.mit.jyu.fi/cgi-bin/tiea2120/randomize.cgi
         // huom. datan sisältö muuttuu hieman jokaisella latauskerralla
@@ -209,7 +212,24 @@ function paivitaRastilista(ulnode, rastit) {
                 ulnode.firstChild.remove();
         }
         luoRastilista(ulnode, rastit);
-        savedata(document.getElementById("listaaRastiNappi").data);
+        savedata(document.getElementById("listaaRastiNappi").data); // HERJAA...
+}
+
+/**
+ * 
+ * @param {Event} e 
+ */
+function rastinLisaysTapahtuma(e) {
+        e.preventDefault();
+        let rastit = document.getElementById("lisaaRastiNappi").rastit;
+        if (tarkistaOikeellisuus(rastit)) {
+                paivitaRastilista(document.getElementById("rastit"), rastit);
+                tyhjennaFormi("lisaaRasti");
+        }
+}
+
+function joukkueenLisaysTapahtuma(e) {
+
 }
 
 /**

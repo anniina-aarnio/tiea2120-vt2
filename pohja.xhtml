@@ -94,6 +94,29 @@ Näytä lomakkeella vain jompikumpi painikkeista:
 Uusi joukkue on lisättävä myös sivulla näkyvään joukkuelistaukseen. 
 
 -->
+  <form id="lisaaJoukkue" action="">
+    <fieldset>
+      <legend>Uusi joukkue</legend>
+      <label for="nimi">Nimi</label>
+      <input type="text" name="nimi" id="nimi" />
+
+      <fieldset id="sarjakysely">
+        <legend>Sarja</legend>
+      </fieldset>
+      <fieldset id="jasenkysely">
+        <legend>Jäsenet</legend>
+        <p>
+          <label for="jasen1">Jäsen 1</label>
+          <input type="text" name="jasen1" id="jasen1" />
+        </p>
+        <p>
+          <label for="jasen2">Jäsen 2</label>
+          <input type="text" name="jasen2" id="jasen2" />
+        </p>
+      </fieldset>
+      <input type="button" id="lisaaJoukkueNappi" value="Lisää joukkue" />
+    </fieldset>
+  </form>
 
 
   <h2>Rastit</h2>

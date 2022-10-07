@@ -1,13 +1,7 @@
 /* tablen tyylittelyt */
 table {
     background-color: #fcfffc;
-    border-collapse: collapse;
-    border: 1px dotted black;
-    width: 100%;
-}
 
-tr th {
-    text-align: left;
 }
 
 td > a {
@@ -38,6 +32,10 @@ form {
     background-color: #fcfffc;
     display: block;
     width: fit-content;
+}
+
+form#lisaaJoukkue {
+    background-color: white;
 }
 
 input {
