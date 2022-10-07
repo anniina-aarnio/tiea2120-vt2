@@ -150,22 +150,53 @@ function luoTaulukonRivit(taulukkonode, sarjat, joukkueet) {
 function luoTyhjaJoukkueenLisays(formi) {
         // tyhjentää nimen
         formi["nimi"].value = "";
+
         // sarjavalintalista radionappeineen
         let sarjat = document.getElementById("lisaaRastiNappi").sarjat;
         for (let [id,sarja] of sarjat) {
                 // luodaan label ja siihen tekstiksi sarjan nimi
                 let labeli = document.createElement("label");
-                labeli.textContent = sarja.firstChild.textContent;
+                labeli.textContent = sarja.textContent;
 
                 let radionappi = document.createElement("input");
                 radionappi.setAttribute("type", "radio");
+                radionappi.setAttribute("id", id);
                 formi["sarjakysely"].appendChild(labeli);
                 formi["sarjakysely"].appendChild(radionappi);
         }
 
         // jäsenluettelon muokkaaminen
+        formi["jasenkysely"].appendChild(luoJasenLabelJaInput(10));
+
         // yli kahden 
 }
+
+/**
+ * Luo p-elementin, johon lisää labelin ja inputin
+ * Labelin tekstisisältö on "Jäsen X" x ollessa annettu numero
+ * Labeliin tulee myös tieto for="jasenX" samalla logiikalla
+ * Luodaan input, jonka type="text", name="jasenX", id="jasenX"
+ * Palautetaan p-elementti
+ * @param {Number} nro numero, joka tulee seuraavaan jäsenelementtiin mukaan
+ * @return {Element} p-elementti, jossa label ja input jäsen nro
+ */
+function luoJasenLabelJaInput(nro) {
+        let p = document.createElement("p");
+        let labeli = document.createElement("label");
+        let inputti = document.createElement("input");
+
+        let jasenNyt = "jasen" + String(nro);
+        labeli.setAttribute("for", jasenNyt);
+        labeli.textContent = "Jäsen " + String(nro);
+        inputti.setAttribute("type", "text");
+        inputti.setAttribute("name", jasenNyt);
+        inputti.setAttribute("id", jasenNyt);
+
+        p.appendChild(labeli);
+        p.appendChild(inputti);
+
+        return p;
+} 
 
 /**
  * Aakkostaa joukkuelistan joukkueen nimien mukaan
