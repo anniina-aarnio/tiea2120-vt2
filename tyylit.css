@@ -31,21 +31,29 @@ form {
     width: fit-content;
 }
 
+form > fieldset label {
+    display:block;
+}
+
 form#lisaaJoukkue {
     background-color: white;
     display: block;
     width: fit-content;
 }
 
+form#lisaaJoukkue > label {
+    padding-left: 1em;
+}
+
 fieldset#sarjakysely {
-    width: 10em;
+    width: 18em;
 }
 
 fieldset#sarjakysely > label {
-    float: left;
+    display: block;
 }
 
-fieldset#sarjakysely > input {
+fieldset#sarjakysely > label input {
     float: right;
 }
 

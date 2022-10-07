@@ -162,8 +162,8 @@ function luoTyhjaJoukkueenLisays(formi) {
                 radionappi.setAttribute("type", "radio");
                 radionappi.setAttribute("name", "sarjaradiot");
                 radionappi.setAttribute("id", id);
+                labeli.appendChild(radionappi);
                 formi["sarjakysely"].appendChild(labeli);
-                formi["sarjakysely"].appendChild(radionappi);
         }
 
         // jäsenluettelon muokkaaminen
@@ -181,7 +181,7 @@ function luoTyhjaJoukkueenLisays(formi) {
  * @return {Element} p-elementti, jossa label ja input jäsen nro
  */
 function luoJasenLabelJaInput(nro) {
-        let p = document.createElement("p");
+        //let p = document.createElement("p");
         let labeli = document.createElement("label");
         let inputti = document.createElement("input");
 
@@ -192,10 +192,12 @@ function luoJasenLabelJaInput(nro) {
         inputti.setAttribute("name", jasenNyt);
         inputti.setAttribute("id", jasenNyt);
 
-        p.appendChild(labeli);
-        p.appendChild(inputti);
+        labeli.appendChild(inputti);
+        //p.appendChild(labeli);
+        //p.appendChild(inputti);
 
-        return p;
+        //return p;
+        return labeli;
 } 
 
 /**
