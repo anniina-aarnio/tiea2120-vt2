@@ -152,7 +152,7 @@ function luoTyhjaJoukkueenLisays(formi) {
         formi["nimi"].value = "";
 
         // sarjavalintalista radionappeineen
-        let sarjat = document.getElementById("lisaaRastiNappi").sarjat;
+        let sarjat = document.getElementById("lisaaRastiNappi").sarjat; //aakkostus tarvittaisiin..
         for (let [id,sarja] of sarjat) {
                 // luodaan label ja siihen tekstiksi sarjan nimi
                 let labeli = document.createElement("label");
@@ -160,6 +160,7 @@ function luoTyhjaJoukkueenLisays(formi) {
 
                 let radionappi = document.createElement("input");
                 radionappi.setAttribute("type", "radio");
+                radionappi.setAttribute("name", "sarjaradiot");
                 radionappi.setAttribute("id", id);
                 formi["sarjakysely"].appendChild(labeli);
                 formi["sarjakysely"].appendChild(radionappi);
