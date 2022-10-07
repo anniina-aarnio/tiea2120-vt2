@@ -27,6 +27,8 @@ function start(data) {
         let rastit = luoMapIdeista(data, "rasti");
         // luodaan map, jossa joukkueet nimi -> node -pareina
         let joukkueet = luoJoukkueetMap(data);
+
+        // lisätään kaikki data nappiin...
         nappi.sarjat = sarjat;
         nappi.rastit = rastit;
         nappi.joukkueet = joukkueet;
@@ -49,7 +51,8 @@ function start(data) {
 
         // luodaan lomake, jolla voi lisätä XML-rakenteeseen uuden joukkueen
         let joukkueenLisays = document.forms["lisaaJoukkue"];
-        luotyhjaJoukkueenLisays(joukkueenLisays);
+        luoTyhjaJoukkueenLisays(joukkueenLisays);
+
 /*      TÄMÄ VIELÄ EI TOIMI
         // jäsenkysely-osassa lisää jäsenlomakealueita labeleineen sitä mukaa kun täyttyy
         joukkueenLisays["jasenkysely"].addEventListener("input", function () {
@@ -58,6 +61,7 @@ function start(data) {
                         let testifunktio = function(e) { ks. dom_ja_tapahtumat kohdasta}
                 }
         }); */
+
         joukkueenLisays["lisaaJoukkueNappi"].addEventListener('click', joukkueenLisaysTapahtuma);
 
 
@@ -143,10 +147,21 @@ function luoTaulukonRivit(taulukkonode, sarjat, joukkueet) {
 
 }
 
-function luotyhjaJoukkueenLisays(formi) {
+function luoTyhjaJoukkueenLisays(formi) {
         // tyhjentää nimen
-        
+        formi["nimi"].value = "";
         // sarjavalintalista radionappeineen
+        let sarjat = document.getElementById("lisaaRastiNappi").sarjat;
+        for (let [id,sarja] of sarjat) {
+                // luodaan label ja siihen tekstiksi sarjan nimi
+                let labeli = document.createElement("label");
+                labeli.textContent = sarja.firstChild.textContent;
+
+                let radionappi = document.createElement("input");
+                radionappi.setAttribute("type", "radio");
+                formi["sarjakysely"].appendChild(labeli);
+                formi["sarjakysely"].appendChild(radionappi);
+        }
 
         // jäsenluettelon muokkaaminen
         // yli kahden 
