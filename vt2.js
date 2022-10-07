@@ -11,7 +11,7 @@
 // testaa sovellusta molemmilla arvoilla
 // localStoragen voi myös itse tyhjentää Storage-välilehden kautta
 
-reset = true;
+reset = false;
 
 
 // tätä funktiota kutsutaan automaattisesti käsiteltävällä datalla
@@ -212,23 +212,34 @@ function paivitaRastilista(ulnode, rastit) {
                 ulnode.firstChild.remove();
         }
         luoRastilista(ulnode, rastit);
-        savedata(document.getElementById("listaaRastiNappi").data); // HERJAA...
+        let data = document.getElementById("lisaaRastiNappi").data;
+        savedata(data);
+}
+
+/**
+ * Kun painetaan "lisää rasti" -nappia, event (e) tapahtuu
+ * tämän alla olevien käskyjen mukaisesti.
+ * Käy läpi syötteen oikeellisuuden, ja jos kaikki on kunnossa,
+ * päivittää rastilistan ja tyhjentää formin.
+ * @param {Event} e tapahtuma
+ */
+function rastinLisaysTapahtuma(e) {
+        e.preventDefault();
+        let rastit = document.getElementById("lisaaRastiNappi").rastit;
+        if (tarkistaRastinOikeellisuus(rastit)) {
+                paivitaRastilista(document.getElementById("rastit"), rastit);
+                tyhjennaFormi("lisaaRasti");
+        }
 }
 
 /**
  * 
  * @param {Event} e 
  */
-function rastinLisaysTapahtuma(e) {
-        e.preventDefault();
-        let rastit = document.getElementById("lisaaRastiNappi").rastit;
-        if (tarkistaOikeellisuus(rastit)) {
-                paivitaRastilista(document.getElementById("rastit"), rastit);
-                tyhjennaFormi("lisaaRasti");
-        }
-}
-
 function joukkueenLisaysTapahtuma(e) {
+        e.preventDefault();
+        let joukkueet = document.getElementById("lisaaRastiNappi").rastit;
+        //if (tarkistaJoukkueenOikeellisuus)
 
 }
 
@@ -240,7 +251,7 @@ function joukkueenLisaysTapahtuma(e) {
  * @param {Map} rastit
  * @return {Boolean} true, jos rasti lisätään, false jos ei
  */
-function tarkistaOikeellisuus(rastit) {
+function tarkistaRastinOikeellisuus(rastit) {
         //e.preventDefault();
         // inputtien tekstit
         let lat = document.forms["lisaaRasti"]["lat"].value;
