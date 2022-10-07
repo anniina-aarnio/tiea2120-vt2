@@ -45,16 +45,19 @@ function start(data) {
         // luodaan lomake, jolla voi lisätä XML-rakenteeseen uuden rastin
         // documents.forms-rajapinnan kautta
         let rastinLisays = document.forms["lisaaRasti"];
-
-/*         rastinLisays["lisaaRastiNappi"].addEventListener('click', function() {
-                if (tarkistaOikeellisuus(rastit)) {
-                        paivitaRastilista(rastilista, rastit);
-                        tyhjennaFormi("lisaaRasti");
-                }
-        }); */
         rastinLisays["lisaaRastiNappi"].addEventListener('click', rastinLisaysTapahtuma);
 
+        // luodaan lomake, jolla voi lisätä XML-rakenteeseen uuden joukkueen
         let joukkueenLisays = document.forms["lisaaJoukkue"];
+        luotyhjaJoukkueenLisays(joukkueenLisays);
+/*      TÄMÄ VIELÄ EI TOIMI
+        // jäsenkysely-osassa lisää jäsenlomakealueita labeleineen sitä mukaa kun täyttyy
+        joukkueenLisays["jasenkysely"].addEventListener("input", function () {
+                let elementit = joukkueenLisays["jasenkysely"].get .. elements jotakin
+                for (let elem of elementit) {
+                        let testifunktio = function(e) { ks. dom_ja_tapahtumat kohdasta}
+                }
+        }); */
         joukkueenLisays["lisaaJoukkueNappi"].addEventListener('click', joukkueenLisaysTapahtuma);
 
 
@@ -138,6 +141,15 @@ function luoTaulukonRivit(taulukkonode, sarjat, joukkueet) {
                 }
         }
 
+}
+
+function luotyhjaJoukkueenLisays(formi) {
+        // tyhjentää nimen
+        
+        // sarjavalintalista radionappeineen
+
+        // jäsenluettelon muokkaaminen
+        // yli kahden 
 }
 
 /**
@@ -233,26 +245,34 @@ function rastinLisaysTapahtuma(e) {
 }
 
 /**
- * 
+ * Kun painetaan "lisää joukkue" -nappia, event(e) tapahtuu
+ * alla olevien käskyjen mukaisesti.
+ * Käy läpi syötteen oikeellisuuden, ja jos kaikki on kunnossa,
+ * päivittää joukkuelistan ja tyhjentää formin.
  * @param {Event} e 
  */
 function joukkueenLisaysTapahtuma(e) {
         e.preventDefault();
         let joukkueet = document.getElementById("lisaaRastiNappi").rastit;
-        //if (tarkistaJoukkueenOikeellisuus)
+        if (tarkistaJoukkueenOikeellisuus(joukkueet)) {
+                //paivitaJoukkuelista(document.getElementById("joukkueet"), joukkueet);
+                tyhjennaFormi("lisaaJoukkue");
+        }
 
 }
 
 /**
- * Tarkistaa, onko lomakkeen sisällöt sellaisia että ne voi lähettää
+ * Tarkistaa, onko lomakkeen sisällöt sellaisia että ne voi lähettää.
  * Jos ei ole, mitään ei tapahdu
- * Jos on, rasti lisätään listaan, lista päivittyy, sivu päivittyy ja lomake tyhjenee
- * Katsoo myös, ettei tule kahta samalla koodilla varustettua rastia.
+ * Jos on, luo uuden rastin, lisätään mappiin ja annetaan kutsuvalle
+ * funktiolle lupa päivittää rastilista ja tyhjentää lomake.
+ * Tarkistettavat asiat:
+ * - lat ja lon ovat liukulukuja
+ * - ei kahta samalla koodilla varustettua rastia
  * @param {Map} rastit
  * @return {Boolean} true, jos rasti lisätään, false jos ei
  */
 function tarkistaRastinOikeellisuus(rastit) {
-        //e.preventDefault();
         // inputtien tekstit
         let lat = document.forms["lisaaRasti"]["lat"].value;
         let lon = document.forms["lisaaRasti"]["lon"].value;
@@ -286,6 +306,30 @@ function tarkistaRastinOikeellisuus(rastit) {
 
         lisaaRasti(rasti, rastit);
         return true;
+}
+
+/**
+ * Tarkistaa, onko lomakkeen sisällöt sellaisia, että ne voi lähettää.
+ * Jos ei ole, mitään ei tapahdu.
+ * Jos on, luodaan uusi joukkue, lisätään mappiin ja annetaan kutsuvalle
+ * funktiolle lupa päivittää joukkuelista ja tyhjentää lomake.
+ * Tarkistettavat asiat:
+ * - joukkueen nimi on uniikki
+ * - jäseniä on vähintään kaksi
+ * - joukkueen sarja on valittu
+ * - tyhjiä jäsenkenttiä ei huomioida
+ * Lisää joukkueen tietoihin myös
+ * - rastileimaukset (oletuksena tyhjä)
+ * - leimaustavan (oletuksena kaikilla GPS indeksinä merkittynä)
+ * - aika (oletuksena 00:00:00)
+ * - matka (oletuksena 0)
+ * - pisteet (oletuksena 0)
+ * @param {Map} joukkueet 
+ */
+function tarkistaJoukkueenOikeellisuus(joukkueet) {
+        // inputtien sisällöt
+        let nimi = document.forms["lisaaJoukkue"]["nimi"].value;
+        let jasenet = [];
 }
 
 /**
