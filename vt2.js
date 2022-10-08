@@ -359,6 +359,10 @@ function joukkueenMuokkausTapahtuma(e) {
 
                 nro += 1;
         }
+        // lisätään yksi tyhjä
+        let uusi = luoJasenLabelJaInput(nro);
+        formi["jasenkysely"].appendChild(uusi);
+
         console.log(joukkue, radiot);
 
         // vaihdetaan nappi "lisää joukkue"-sijasta "muokkaa joukkuetta"-napiksi
