@@ -164,8 +164,8 @@ function luoTyhjaJoukkueenLisays(formi) {
         // tyhjentää nimen
         formi["nimi"].value = "";
 
-        // sarjavalintalista radionappeineen
-        let sarjat = document.getElementById("lisaaRastiNappi").sarjat; //aakkostus tarvittaisiin..
+        // sarjavalintalista radionappeineen TODO aakkosjärjestys sarjoihin
+        let sarjat = document.getElementById("lisaaRastiNappi").sarjat;
         for (let [id,sarja] of sarjat) {
                 // luodaan label ja siihen tekstiksi sarjan nimi
                 let labeli = document.createElement("label");
@@ -181,20 +181,19 @@ function luoTyhjaJoukkueenLisays(formi) {
 
         // jäsenluettelon muokkaaminen
         formi["jasenkysely"].appendChild(luoJasenLabelJaInput(1));
-        formi["jasenkysely"].appendChild(luoJasenLabelJaInput(2));
 }
 
 /**
- * Luo p-elementin, johon lisää labelin ja inputin
+ * Luo label-elementin, johon lisää sisälle text-inputin
  * Labelin tekstisisältö on "Jäsen X" x ollessa annettu numero
  * Labeliin tulee myös tieto for="jasenX" samalla logiikalla
  * Luodaan input, jonka type="text", name="jasenX", id="jasenX"
- * Palautetaan p-elementti
+ * Numeron saa haettua helposti labeli.nro :lla
+ * Palautetaan label.
  * @param {Number} nro numero, joka tulee seuraavaan jäsenelementtiin mukaan
- * @return {Element} p-elementti, jossa label ja input jäsen nro
+ * @return {Element} label-elementti, jossa input jäsen nro
  */
 function luoJasenLabelJaInput(nro) {
-        //let p = document.createElement("p");
         let labeli = document.createElement("label");
         let inputti = document.createElement("input");
 
@@ -204,7 +203,7 @@ function luoJasenLabelJaInput(nro) {
         inputti.setAttribute("type", "text");
         inputti.setAttribute("name", jasenNyt);
         inputti.setAttribute("id", jasenNyt);
-
+        labeli.nro = nro;
         labeli.appendChild(inputti);
 
         return labeli;
@@ -327,14 +326,16 @@ function joukkueenLisaysTapahtuma(e) {
 function joukkueenMuokkausTapahtuma(e) {
         // hae oikea joukkue
         let joukkueet = document.getElementById("lisaaRastiNappi").joukkueet;
-        let joukkueennimi = e.originalTarget.textContent;
+        let joukkueennimi = e.originalTarget.textContent.trim();
         let joukkue = joukkueet.get(joukkueennimi);
-        console.log(joukkue);
+
         // haetaan muokattava formi
         let formi = document.forms["lisaaJoukkue"];
 
         formi["nimi"].value = joukkueennimi;
-        formi["sarjakysely"].
+        let radiot = formi["sarjakysely"].getElementsByTagName("radio");
+        console.log(radiot);
+
 }
 
 /**
