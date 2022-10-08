@@ -178,6 +178,8 @@ function luoTyhjaJoukkueenLisays(formi) {
 
         // jäsenluettelon muokkaaminen
         formi["jasenkysely"].appendChild(luoJasenLabelJaInput(1));
+        let nappi = formi["joukkueenKaikkiTiedot"].lastElementChild;
+        nappi.value = "Lisää joukkue";
 }
 
 /**
@@ -366,7 +368,8 @@ function joukkueenMuokkausTapahtuma(e) {
         console.log(joukkue, radiot);
 
         // vaihdetaan nappi "lisää joukkue"-sijasta "muokkaa joukkuetta"-napiksi
-
+        let nappi = formi["joukkueenKaikkiTiedot"].lastElementChild;
+        nappi.value = "Muokkaa joukkuetta";
 }
 
 /**
