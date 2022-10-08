@@ -31,8 +31,21 @@ form {
     width: fit-content;
 }
 
+form fieldset {
+    width: 15em;
+}
+
 form > fieldset label {
-    display:block;
+    display: block;
+    padding: 2px;
+}
+
+form > fieldset label input {
+    float: right;
+}
+
+form > fieldset > input {
+    clear: both;
 }
 
 form#lisaaJoukkue {
