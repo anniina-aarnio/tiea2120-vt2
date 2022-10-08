@@ -154,6 +154,12 @@ function luoTaulukonRivit(taulukkonode, sarjat, joukkueet) {
 
 }
 
+/**
+ * Luo joukkueenlisäys-lomakkeen, jossa tyhjät inputit.
+ * Etsii vaihtoehtoiset sarjat ja laittaa niihin radiosarjan, josta vain yksi voi olla valittuna.
+ * Luo aluksi kaksi tyhjää joukkueen jäsen-inputtia.
+ * @param {Form} formi 
+ */
 function luoTyhjaJoukkueenLisays(formi) {
         // tyhjentää nimen
         formi["nimi"].value = "";
@@ -323,11 +329,12 @@ function joukkueenMuokkausTapahtuma(e) {
         let joukkueet = document.getElementById("lisaaRastiNappi").joukkueet;
         let joukkueennimi = e.originalTarget.textContent;
         let joukkue = joukkueet.get(joukkueennimi);
-
+        console.log(joukkue);
         // haetaan muokattava formi
         let formi = document.forms["lisaaJoukkue"];
 
         formi["nimi"].value = joukkueennimi;
+        formi["sarjakysely"].
 }
 
 /**
