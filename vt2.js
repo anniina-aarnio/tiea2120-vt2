@@ -64,6 +64,13 @@ function start(data) {
 
         joukkueenLisays["lisaaJoukkueNappi"].addEventListener('click', joukkueenLisaysTapahtuma);
 
+        // luodaan toiminnallisuus joukkueen muokkaamiselle
+        // joukkueen nimilinkistä täyttyy joukkueenlisäys-sisällöt ja muuttuu muokkausnappi
+        let aelementit = document.getElementsByClassName("joukkueennimi");
+        for (let a of aelementit) {
+                a.addEventListener("click", joukkueenMuokkausTapahtuma);
+        }
+
 
         // dataa voi tutkia myös osoitteesta: https://appro.mit.jyu.fi/cgi-bin/tiea2120/randomize.cgi
         // huom. datan sisältö muuttuu hieman jokaisella latauskerralla
@@ -193,10 +200,7 @@ function luoJasenLabelJaInput(nro) {
         inputti.setAttribute("id", jasenNyt);
 
         labeli.appendChild(inputti);
-        //p.appendChild(labeli);
-        //p.appendChild(inputti);
 
-        //return p;
         return labeli;
 } 
 
@@ -234,6 +238,8 @@ function luoTaulukonRivi(sarjannimi, joukkue) {
         }
 
         joukkuenimi.textContent = joukkue.lastChild.textContent;
+        joukkuenimi.setAttribute("href", "#joukkueOtsikko");
+        joukkuenimi.setAttribute("class", "joukkueennimi");
         joukkueTekstit.appendChild(joukkuenimi);
         joukkueTekstit.appendChild(jasenet);
 
@@ -301,12 +307,39 @@ function rastinLisaysTapahtuma(e) {
  */
 function joukkueenLisaysTapahtuma(e) {
         e.preventDefault();
-        let joukkueet = document.getElementById("lisaaRastiNappi").rastit;
+        let joukkueet = document.getElementById("lisaaRastiNappi").joukkueet;
         if (tarkistaJoukkueenOikeellisuus(joukkueet)) {
-                //paivitaJoukkuelista(document.getElementById("joukkueet"), joukkueet);
+                paivitaJoukkuelista(document.getElementById("tulokset"), joukkueet);
                 tyhjennaFormi("lisaaJoukkue");
         }
+}
 
+/**
+ * 
+ * @param {Event} e 
+ */
+function joukkueenMuokkausTapahtuma(e) {
+        // hae oikea joukkue
+        let joukkueet = document.getElementById("lisaaRastiNappi").joukkueet;
+        let joukkueennimi = e.originalTarget.textContent;
+        let joukkue = joukkueet.get(joukkueennimi);
+
+        // haetaan muokattava formi
+        let formi = document.forms["lisaaJoukkue"];
+
+        formi["nimi"].value = joukkueennimi;
+}
+
+/**
+ * 
+ * @param {Node} taulukko 
+ * @param {Map} joukkueet 
+ */
+function paivitaJoukkuelista(taulukko, joukkueet) {
+        // ensin tyhjennä taulukko
+        
+        // luo uusi taulukko
+        luoTaulukonRivit(taulukko, document.getElementById("lisaaSarjaNappi").sarjat, joukkueet);
 }
 
 /**
@@ -356,7 +389,7 @@ function tarkistaRastinOikeellisuus(rastit) {
         return true;
 }
 
-/**
+/** TODO
  * Tarkistaa, onko lomakkeen sisällöt sellaisia, että ne voi lähettää.
  * Jos ei ole, mitään ei tapahdu.
  * Jos on, luodaan uusi joukkue, lisätään mappiin ja annetaan kutsuvalle
