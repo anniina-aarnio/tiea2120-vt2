@@ -332,9 +332,35 @@ function joukkueenMuokkausTapahtuma(e) {
         // haetaan muokattava formi
         let formi = document.forms["lisaaJoukkue"];
 
+        // joukkueen nimi nimeksi
         formi["nimi"].value = joukkueennimi;
-        let radiot = formi["sarjakysely"].getElementsByTagName("radio");
-        console.log(radiot);
+
+        // etsitään oikea sarja valituksi ID:n mukaan
+        let radiot = formi["sarjakysely"].getElementsByTagName("label");
+        for (let radio of radiot) {
+                let radioID = radio.firstElementChild.getAttribute("id");
+                let joukkueenSarjaID = joukkue.getAttribute("sarja");
+                if (radioID === joukkueenSarjaID) {
+                        radio.firstElementChild.checked = true;
+                        break;
+                }
+        }
+
+        // täytetään jäsenet
+        let nro = 1;
+        for (let jasen of joukkue.firstChild.childNodes) {
+                if (nro == 1) {
+
+                } else {
+                        let uusi = luoJasenLabelJaInput(nro);
+                        console.log(uusi);
+                }
+
+                nro += 1;
+        }
+        console.log(joukkue, radiot);
+
+        // vaihdetaan nappi "lisää joukkue"-sijasta "muokkaa joukkuetta"-napiksi
 
 }
 
@@ -419,6 +445,13 @@ function tarkistaJoukkueenOikeellisuus(joukkueet) {
         // inputtien sisällöt
         let nimi = document.forms["lisaaJoukkue"]["nimi"].value;
         let jasenet = [];
+
+        // jos menee läpi:
+        // tarkistaa kummasta napista kyse ja vaihtaa sopivaksi
+
+        // muokkaa joukkue: vaihtaa napin lisää joukkue
+
+        // lisää joukkue: ei muutoksia
 }
 
 /**
