@@ -54,10 +54,8 @@ function start(data) {
         luoTyhjaJoukkueenLisays(joukkueenLisays);
 
         // jäsenkysely-osassa lisää jäsenlomakealueita labeleineen sitä mukaa kun täyttyy
-        let elementit = joukkueenLisays["jasenkysely"].elements;
-        for (let elem of elementit) {
-                console.log(elem);
-        }
+        let jasenet = joukkueenLisays["jasenkysely"].getElementsByTagName("input");
+        jasenet[0].addEventListener("input", lisaaUusiJasenlabel);
 
         joukkueenLisays["lisaaJoukkueNappi"].addEventListener('click', joukkueenLisaysTapahtuma);
 
@@ -372,7 +370,7 @@ function joukkueenMuokkausTapahtuma(e) {
         nappi.value = "Muokkaa joukkuetta";
 }
 
-/**
+/** TODO kommentit ja toiminta
  * 
  * @param {Node} taulukko 
  * @param {Map} joukkueet 
@@ -384,7 +382,7 @@ function paivitaJoukkuelista(taulukko, joukkueet) {
         luoTaulukonRivit(taulukko, document.getElementById("lisaaSarjaNappi").sarjat, joukkueet);
 }
 
-/**
+/** TODO entäs validointi?
  * Tarkistaa, onko lomakkeen sisällöt sellaisia että ne voi lähettää.
  * Jos ei ole, mitään ei tapahdu
  * Jos on, luo uuden rastin, lisätään mappiin ja annetaan kutsuvalle
@@ -431,7 +429,7 @@ function tarkistaRastinOikeellisuus(rastit) {
         return true;
 }
 
-/** TODO
+/** TODO toiminta - vai validointi ?
  * Tarkistaa, onko lomakkeen sisällöt sellaisia, että ne voi lähettää.
  * Jos ei ole, mitään ei tapahdu.
  * Jos on, luodaan uusi joukkue, lisätään mappiin ja annetaan kutsuvalle
@@ -488,6 +486,7 @@ function lisaaRasti(rasti, rastit) {
 
 /**
  * Onnistuneen lisäyksen jälkeen tyhjentää formin input-text-laatikot
+ * Jos kyseessä on joukkueenlisäysformi, poistaa kaikki labelit
  * @param {String} forminID formin id
  */
 function tyhjennaFormi(forminID) {
@@ -499,6 +498,45 @@ function tyhjennaFormi(forminID) {
                 }
         }
 }
+
+/**
+ * Lisää uusia jäsenlabeleita jäsenkyselyyn siten, että
+ * aina on yksi tyhjä input
+ * Jos välistä tyhjentää inputteja, ei lisää uutta tyhjää
+ * alimmaksi, mutta jos muut on täytettyjä,
+ * lisää uuden laatikon
+ * @param {Event} e 
+ */
+function lisaaUusiJasenlabel(e) {
+        let formi = document.forms["lisaaJoukkue"]["jasenkysely"];
+        let inputit = formi.getElementsByTagName("input");
+        // viimeisen tyhjän kentän paikka listassa
+        let viimeinen_tyhja = -1;
+
+        // käydään läpi kaikki input-kentät viimeisestä ensimmäiseen
+        for (let i = inputit.length-1; i >- 1; i--) {
+                let input = inputit[i];
+
+                // pelkät välilyönnit ei käy nimeksi
+                if (viimeinen_tyhja > -1 && input.value.trim() == "") {
+                        inputit[viimeinen_tyhja].remove();
+                        viimeinen_tyhja = i;
+                }
+
+                // ei ole löydetty vielä yhtään tyhjää, joten otetaan ensimmäinen tyhjä talteen
+                if (viimeinen_tyhja == -1 && input.value.trim() == "") {
+                        viimeinen_tyhja = i;
+                }
+        }
+
+        // ei ollut tyhjiä kenttiä, joten lisätään yksi
+        if (viimeinen_tyhja == -1) {
+                let uusi = lisaaUusiJasenlabel(inputit.length);
+                formi.appendChild(uusi);
+        }
+}
+
+
 
 // ----- OMAT APUFUNKTIOT mm. vertailuun-----
 
