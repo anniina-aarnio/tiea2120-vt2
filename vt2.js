@@ -409,14 +409,7 @@ function lisaaRasti(rasti, rastit) {
  * @param {String} forminID formin id
  */
 function tyhjennaFormi(forminID) {
-        let elementit = document.forms[forminID].elements;
-
-        for (let e of elementit) {
-                if (e.nodeName === "input" && e.type === "text") {
-                        e.value = "";
-                }
-        }
-        console.log(elementit);
+        document.forms[forminID].reset();
 }
 
 // ----- OMAT APUFUNKTIOT mm. vertailuun-----
