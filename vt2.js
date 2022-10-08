@@ -325,11 +325,11 @@ function joukkueenLisaysTapahtuma(e) {
  */
 function joukkueenMuokkausTapahtuma(e) {
 
-        // haetaan muokattava formi
-        let formi = document.forms["lisaaJoukkue"];
-
         // tyhjennetään formi
         tyhjennaFormi("lisaaJoukkue");
+
+        // haetaan muokattava formi
+        let formi = document.forms["lisaaJoukkue"];
 
         // hae oikea joukkue
         let joukkueet = document.getElementById("lisaaRastiNappi").joukkueet;
