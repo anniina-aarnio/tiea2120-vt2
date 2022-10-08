@@ -53,14 +53,11 @@ function start(data) {
         let joukkueenLisays = document.forms["lisaaJoukkue"];
         luoTyhjaJoukkueenLisays(joukkueenLisays);
 
-/*      TÄMÄ VIELÄ EI TOIMI
         // jäsenkysely-osassa lisää jäsenlomakealueita labeleineen sitä mukaa kun täyttyy
-        joukkueenLisays["jasenkysely"].addEventListener("input", function () {
-                let elementit = joukkueenLisays["jasenkysely"].get .. elements jotakin
-                for (let elem of elementit) {
-                        let testifunktio = function(e) { ks. dom_ja_tapahtumat kohdasta}
-                }
-        }); */
+        let elementit = joukkueenLisays["jasenkysely"].elements;
+        for (let elem of elementit) {
+                console.log(elem);
+        }
 
         joukkueenLisays["lisaaJoukkueNappi"].addEventListener('click', joukkueenLisaysTapahtuma);
 
@@ -320,17 +317,24 @@ function joukkueenLisaysTapahtuma(e) {
 }
 
 /**
- * 
+ * Jos klikkaa joukkueen nimeä taulukosta, tullaan tähän tapahtumaan
+ * Hakee oikean joukkueen eventin perusteella
+ * ja täyttää lomakkeen tiedot joukkueen tiedoilla
+ * Muuttaa "Lisää joukkue"-napin "Muokkaa joukkuetta"-napiksi
  * @param {Event} e 
  */
 function joukkueenMuokkausTapahtuma(e) {
+
+        // haetaan muokattava formi
+        let formi = document.forms["lisaaJoukkue"];
+
+        // tyhjennetään formi
+        tyhjennaFormi("lisaaJoukkue");
+
         // hae oikea joukkue
         let joukkueet = document.getElementById("lisaaRastiNappi").joukkueet;
         let joukkueennimi = e.originalTarget.textContent.trim();
         let joukkue = joukkueet.get(joukkueennimi);
-
-        // haetaan muokattava formi
-        let formi = document.forms["lisaaJoukkue"];
 
         // joukkueen nimi nimeksi
         formi["nimi"].value = joukkueennimi;
@@ -349,12 +353,9 @@ function joukkueenMuokkausTapahtuma(e) {
         // täytetään jäsenet
         let nro = 1;
         for (let jasen of joukkue.firstChild.childNodes) {
-                if (nro == 1) {
-
-                } else {
-                        let uusi = luoJasenLabelJaInput(nro);
-                        console.log(uusi);
-                }
+                let uusi = luoJasenLabelJaInput(nro);
+                uusi.lastChild.value = jasen.textContent;
+                formi["jasenkysely"].appendChild(uusi);
 
                 nro += 1;
         }
@@ -484,6 +485,12 @@ function lisaaRasti(rasti, rastit) {
  */
 function tyhjennaFormi(forminID) {
         document.forms[forminID].reset();
+        if (document.forms[forminID]["jasenkysely"]) {
+                let labelit = document.forms[forminID]["jasenkysely"].children;
+                for (let i = labelit.length-1; i >= 1; i--) {
+                        labelit[i].remove();
+                }
+        }
 }
 
 // ----- OMAT APUFUNKTIOT mm. vertailuun-----
