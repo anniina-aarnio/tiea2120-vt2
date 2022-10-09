@@ -57,7 +57,7 @@ function start(data) {
         jasenet[0].addEventListener("input", lisaaUusiTyhjaJasenlabel);
 
         joukkueenLisays["lisaaJoukkueNappi"].addEventListener('click', joukkueenLisaysTapahtuma);
-        joukkueenLisays["muokkaaJoukkuettaNappi"].addEventListener('submit', joukkueenMuokkausTapahtuma);
+        joukkueenLisays["muokkaaJoukkuettaNappi"].addEventListener('click', joukkueenMuokkausTapahtuma);
 
         // luodaan toiminnallisuus joukkueen muokkaamiselle
         // joukkueen nimilinkistä täyttyy joukkueenlisäys-sisällöt ja muuttuu muokkausnappi
@@ -159,7 +159,7 @@ function luoTyhjaJoukkueenLisays(formi) {
         // tyhjentää nimen
         formi["nimi"].value = "";
 
-        // sarjavalintalista radionappeineen TODO aakkosjärjestys sarjoihin
+        // sarjavalintalista radionappeineen
         let sarjat = document.getElementById("lisaaRastiNappi").sarjat;
         sarjat = new Map([...sarjat]
                 .sort((a,b) => vertaaKaikkiPienella(a[1].textContent, b[1].textContent)));
@@ -340,9 +340,6 @@ function joukkueenMuokkausLomake(e) {
                 inputti.setAttribute("type", "text");
                 inputti.addEventListener("input", lisaaUusiTyhjaJasenlabel);
                 inputti.value = jasen.textContent;
-                if (i == 0 || i == 1) {
-                        inputti.setAttribute("required", "required");
-                }
                 i++;
                 formi["jasenkysely"].appendChild(labeli).appendChild(inputti);
         }
@@ -360,21 +357,44 @@ function joukkueenMuokkausLomake(e) {
         if (nappi.className == "piilossa") {
                 muutaNapinNakyvyys(nappi);
         }
+        nappi.joukkue = joukkue;
 }
 
-/**
+/** TODO mieti miten kuskaat joukkueen tietoa mukana
  * Kun painetaan "muokkaa joukkuetta" -nappia, event(e) tapahtuu
  * alla olevien käskyjen mukaisesti.
+ * Tarkistaa onko nimi sama kuin ennen, tai jos nimeä on muokattu
+ * tarkistaa että toista samannimistä joukkuetta ei ole
  * Käy läpi syötteen oikeellisuuden, ja jos kaikki on kunnossa,
  * päivittää joukkueen tiedot, joukkuelistan ja tyhjentää formin.
  * @param {Event} e 
  */
 function joukkueenMuokkausTapahtuma(e) {
+        let joukkue = document.forms["lisaaJoukkue"]["joukkueenKaikkiTiedot"].lastElementChild.joukkue;
+        
         console.log(e);
+        
+        // tarkista nimen oikeellisuus
+        let nimi = document.forms["lisaaJoukkue"]["nimi"].value;
+
+        // jos nimi on muutettu ja ei ole uniikki tai tyhjä
+        if (nimi != joukkue.childNodes[3].value) {
+                if (nimi == "") {
+                        return;
+                }
+                if (!onkoUniikki(nimi)) { //TODO
+                        return;
+                }
+        }
+        tarkistaJoukkueenOikeellisuus(document.forms["lisaaJoukkue"]);
+
+
+
 }
 
 /**
  * Muutetaan annettu nappi piiloon ja vaihdetaan toinen napin näkyvyys tilalle
+ * Annetaan input-nappi, joka on joko "lisaaJoukkueNappi" tai "muokkaaJoukkuettaNappi"
  * @param {Input} nappi 
  */
 function muutaNapinNakyvyys(nappi) {
@@ -452,21 +472,23 @@ function tarkistaRastinOikeellisuus(rastit) {
  * Jos on, luodaan uusi joukkue, lisätään mappiin ja annetaan kutsuvalle
  * funktiolle lupa päivittää joukkuelista ja tyhjentää lomake.
  * Tarkistettavat asiat:
- * - joukkueen nimi on uniikki
  * - jäseniä on vähintään kaksi
  * - joukkueen sarja on valittu
  * - tyhjiä jäsenkenttiä ei huomioida
+ * Funktio EI TARKISTA:
+ * - joukkueen nimeä, se tulee olla tarkistettu ennen tämän funktion kutsumista
  * Lisää joukkueen tietoihin myös
  * - rastileimaukset (oletuksena tyhjä)
  * - leimaustavan (oletuksena kaikilla GPS indeksinä merkittynä)
  * - aika (oletuksena 00:00:00)
  * - matka (oletuksena 0)
  * - pisteet (oletuksena 0)
- * @param {Map} joukkueet 
+ * @param {Form} formi 
  */
-function tarkistaJoukkueenOikeellisuus(joukkueet) {
+function tarkistaJoukkueenOikeellisuus(formi) {
         // inputtien sisällöt
-        let nimi = document.forms["lisaaJoukkue"]["nimi"].value;
+        let onOK = true;
+
         let jasenet = [];
 
         // jos menee läpi:
@@ -561,9 +583,6 @@ function lisaaUusiTyhjaJasenlabel(e) {
         for (let i=0; i < inputit.length; i++) {
                 let label = inputit[i].parentNode;
                 label.firstChild.nodeValue = "Jäsen " + (i+1);
-                if (i == 0 || i == 1) {
-                        label.lastChild.setAttribute("required", "required");
-                }
         }
 }
 
