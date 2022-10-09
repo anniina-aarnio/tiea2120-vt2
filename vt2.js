@@ -174,36 +174,17 @@ function luoTyhjaJoukkueenLisays(formi) {
         }
 
         // jäsenluettelon muokkaaminen
-        formi["jasenkysely"].appendChild(luoJasenLabelJaInput(1));
+        let labeli = document.createElement("label");
+        labeli.textContent = "Jäsen 1";
+        let inputti = document.createElement("input");
+        inputti.setAttribute("type", "text");
+        inputti.addEventListener("input", lisaaUusiJasenlabel);
+        formi["jasenkysely"].appendChild(labeli).appendChild(inputti);
+  
         let nappi = formi["joukkueenKaikkiTiedot"].lastElementChild;
         nappi.value = "Lisää joukkue";
 }
 
-/**
- * Luo label-elementin, johon lisää sisälle text-inputin
- * Labelin tekstisisältö on "Jäsen X" x ollessa annettu numero
- * Labeliin tulee myös tieto for="jasenX" samalla logiikalla
- * Luodaan input, jonka type="text", name="jasenX", id="jasenX"
- * Numeron saa haettua helposti labeli.nro :lla
- * Palautetaan label.
- * @param {Number} nro numero, joka tulee seuraavaan jäsenelementtiin mukaan
- * @return {Element} label-elementti, jossa input jäsen nro
- */
-function luoJasenLabelJaInput(nro) {
-        let labeli = document.createElement("label");
-        let inputti = document.createElement("input");
-
-        let jasenNyt = "jasen" + String(nro);
-        labeli.setAttribute("for", jasenNyt);
-        labeli.textContent = "Jäsen " + String(nro);
-        inputti.setAttribute("type", "text");
-        inputti.setAttribute("name", jasenNyt);
-        inputti.setAttribute("id", jasenNyt);
-        labeli.nro = nro;
-        labeli.appendChild(inputti);
-
-        return labeli;
-} 
 
 /**
  * Aakkostaa joukkuelistan joukkueen nimien mukaan
@@ -352,15 +333,14 @@ function joukkueenMuokkausTapahtuma(e) {
         // täytetään jäsenet
         let nro = 1;
         for (let jasen of joukkue.firstChild.childNodes) {
-                let uusi = luoJasenLabelJaInput(nro);
-                uusi.lastChild.value = jasen.textContent;
-                formi["jasenkysely"].appendChild(uusi);
-
-                nro += 1;
+                let labeli = document.createElement("label");
+                labeli.textContent = "Jäsen";
+                let inputti = document.createElement("input");
+                inputti.setAttribute("type", "text");
+                inputti.addEventListener("input", lisaaUusiJasenlabel);
+                inputti.value = jasen.textContent;
+                formi["jasenkysely"].appendChild(labeli).appendChild(inputti);
         }
-        // lisätään yksi tyhjä
-        let uusi = luoJasenLabelJaInput(nro);
-        formi["jasenkysely"].appendChild(uusi);
 
         console.log(joukkue, radiot);
 
@@ -531,9 +511,18 @@ function lisaaUusiJasenlabel(e) {
 
         // jos ei ollut tyhjiä kenttiä, lisätään yksi
         if (!tyhja) {
-                let uusi = luoJasenLabelJaInput(inputit.length + 1);
-                uusi.addEventListener("input", lisaaUusiJasenlabel);
-                formi.appendChild(uusi);
+                let labeli = document.createElement("label");
+                labeli.textContent = "Jäsen";
+                let inputti = document.createElement("input");
+                inputti.setAttribute("type", "text");
+                inputti.addEventListener("input", lisaaUusiJasenlabel);
+                formi.appendChild(labeli).appendChild(inputti);
+        }
+
+        // jäsenien numerointi
+        for (let i=0; i < inputit.length; i++) {
+                let label = inputit[i].parentNode;
+                label.firstChild.nodeValue = "Jäsen " + (i+1);
         }
 }
 
