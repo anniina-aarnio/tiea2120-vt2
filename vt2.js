@@ -57,12 +57,13 @@ function start(data) {
         jasenet[0].addEventListener("input", lisaaUusiTyhjaJasenlabel);
 
         joukkueenLisays["lisaaJoukkueNappi"].addEventListener('click', joukkueenLisaysTapahtuma);
+        joukkueenLisays["muokkaaJoukkuettaNappi"].addEventListener('submit', joukkueenMuokkausTapahtuma);
 
         // luodaan toiminnallisuus joukkueen muokkaamiselle
         // joukkueen nimilinkistä täyttyy joukkueenlisäys-sisällöt ja muuttuu muokkausnappi
         let aelementit = document.getElementsByClassName("joukkueennimi");
         for (let a of aelementit) {
-                a.addEventListener("click", joukkueenMuokkausTapahtuma);
+                a.addEventListener("click", joukkueenMuokkausLomake);
         }
 
 
@@ -184,7 +185,6 @@ function luoTyhjaJoukkueenLisays(formi) {
         }
 }
 
-
 /**
  * Aakkostaa joukkuelistan joukkueen nimien mukaan
  * Joukkuelistassa joukkueiden täytyy olla nodeja
@@ -299,11 +299,12 @@ function joukkueenLisaysTapahtuma(e) {
  * Jos klikkaa joukkueen nimeä taulukosta, tullaan tähän tapahtumaan
  * Hakee oikean joukkueen eventin perusteella
  * ja täyttää lomakkeen tiedot joukkueen tiedoilla
+ * (joukkueen nimi, sarja ja jäsenet)
  * Muuttaa "Lisää joukkue"-napin "Muokkaa joukkuetta"-napiksi
  * @param {Event} e 
  */
-function joukkueenMuokkausTapahtuma(e) {
-
+function joukkueenMuokkausLomake(e) {
+        e.preventDefault();
         // tyhjennetään formi
         tyhjennaFormi("lisaaJoukkue");
 
@@ -329,8 +330,7 @@ function joukkueenMuokkausTapahtuma(e) {
                 }
         }
 
-        // täytetään jäsenet
-        let nro = 1;
+        // täytetään jäsenet oikeilla tiedoilla
         for (let jasen of joukkue.firstChild.childNodes) {
                 let labeli = document.createElement("label");
                 labeli.textContent = "Jäsen";
@@ -354,6 +354,17 @@ function joukkueenMuokkausTapahtuma(e) {
         if (nappi.className == "piilossa") {
                 muutaNapinNakyvyys(nappi);
         }
+}
+
+/**
+ * Kun painetaan "muokkaa joukkuetta" -nappia, event(e) tapahtuu
+ * alla olevien käskyjen mukaisesti.
+ * Käy läpi syötteen oikeellisuuden, ja jos kaikki on kunnossa,
+ * päivittää joukkueen tiedot, joukkuelistan ja tyhjentää formin.
+ * @param {Event} e 
+ */
+function joukkueenMuokkausTapahtuma(e) {
+        console.log(e);
 }
 
 /**
@@ -544,6 +555,9 @@ function lisaaUusiTyhjaJasenlabel(e) {
         for (let i=0; i < inputit.length; i++) {
                 let label = inputit[i].parentNode;
                 label.firstChild.nodeValue = "Jäsen " + (i+1);
+                if (i == 0 || i == 1) {
+                        label.lastChild.setAttribute("required", "required");
+                }
         }
 }
 
