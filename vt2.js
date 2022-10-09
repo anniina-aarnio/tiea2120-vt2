@@ -174,13 +174,14 @@ function luoTyhjaJoukkueenLisays(formi) {
         }
 
         // jäsenluettelon muokkaaminen
-        let labeli = document.createElement("label");
-        labeli.textContent = "Jäsen 1";
-        let inputti = document.createElement("input");
-        inputti.setAttribute("type", "text");
-        inputti.addEventListener("input", lisaaUusiJasenlabel);
-        formi["jasenkysely"].appendChild(labeli).appendChild(inputti);
-  
+        for (let i = 0; i < 2; i++) {
+                let labeli = document.createElement("label");
+                labeli.textContent = "Jäsen " + (i+1);
+                let inputti = document.createElement("input");
+                inputti.setAttribute("type", "text");
+                inputti.addEventListener("input", lisaaUusiJasenlabel);
+                formi["jasenkysely"].appendChild(labeli).appendChild(inputti);
+        }
         let nappi = formi["joukkueenKaikkiTiedot"].lastElementChild;
         nappi.value = "Lisää joukkue";
 }
@@ -506,7 +507,7 @@ function lisaaUusiJasenlabel(e) {
                 let input = inputit[i];
 
                 // jos on tyhjä ja on jo aiemmin löydetty tyhjä niin poistetaan
-                if (input.value.trim() == "" && tyhja) {
+                if (input.value.trim() == "" && tyhja && inputit.length > 2) {
                         inputit[i].parentNode.remove();
                 }
 
