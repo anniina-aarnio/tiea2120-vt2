@@ -54,7 +54,7 @@ function start(data) {
 
         // jäsenkysely-osassa lisää jäsenlomakealueita labeleineen sitä mukaa kun täyttyy
         let jasenet = joukkueenLisays["jasenkysely"].getElementsByTagName("input");
-        jasenet[0].addEventListener("input", lisaaUusiJasenlabel);
+        jasenet[0].addEventListener("input", lisaaUusiTyhjaJasenlabel);
 
         joukkueenLisays["lisaaJoukkueNappi"].addEventListener('click', joukkueenLisaysTapahtuma);
 
@@ -179,7 +179,7 @@ function luoTyhjaJoukkueenLisays(formi) {
                 labeli.textContent = "Jäsen " + (i+1);
                 let inputti = document.createElement("input");
                 inputti.setAttribute("type", "text");
-                inputti.addEventListener("input", lisaaUusiJasenlabel);
+                inputti.addEventListener("input", lisaaUusiTyhjaJasenlabel);
                 formi["jasenkysely"].appendChild(labeli).appendChild(inputti);
         }
         let nappi = formi["joukkueenKaikkiTiedot"].lastElementChild;
@@ -338,7 +338,7 @@ function joukkueenMuokkausTapahtuma(e) {
                 labeli.textContent = "Jäsen";
                 let inputti = document.createElement("input");
                 inputti.setAttribute("type", "text");
-                inputti.addEventListener("input", lisaaUusiJasenlabel);
+                inputti.addEventListener("input", lisaaUusiTyhjaJasenlabel);
                 inputti.value = jasen.textContent;
                 formi["jasenkysely"].appendChild(labeli).appendChild(inputti);
         }
@@ -348,7 +348,7 @@ function joukkueenMuokkausTapahtuma(e) {
         labeli.textContent = "Jäsen";
         let inputti = document.createElement("input");
         inputti.setAttribute("type", "text");
-        inputti.addEventListener("input", lisaaUusiJasenlabel);
+        inputti.addEventListener("input", lisaaUusiTyhjaJasenlabel);
         formi["jasenkysely"].appendChild(labeli).appendChild(inputti);
 
         console.log(joukkue, radiot);
@@ -495,7 +495,7 @@ function tyhjennaFormi(forminID) {
  * lisää uuden laatikon
  * @param {Event} e 
  */
-function lisaaUusiJasenlabel(e) {
+function lisaaUusiTyhjaJasenlabel(e) {
         let tyhja = false;
 
         // tämä ilmeisesti rikkoo, kun formin sisällä otetaan tägejä...
@@ -524,7 +524,7 @@ function lisaaUusiJasenlabel(e) {
                 labeli.textContent = "Jäsen";
                 let inputti = document.createElement("input");
                 inputti.setAttribute("type", "text");
-                inputti.addEventListener("input", lisaaUusiJasenlabel);
+                inputti.addEventListener("input", lisaaUusiTyhjaJasenlabel);
                 formi.appendChild(labeli).appendChild(inputti);
         }
 
