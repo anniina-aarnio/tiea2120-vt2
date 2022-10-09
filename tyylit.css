@@ -1,3 +1,7 @@
+.piilossa {
+    display: none;
+}
+
 /* tablen tyylittelyt */
 table {
     background-color: #fcfffc;

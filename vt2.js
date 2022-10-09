@@ -182,8 +182,6 @@ function luoTyhjaJoukkueenLisays(formi) {
                 inputti.addEventListener("input", lisaaUusiTyhjaJasenlabel);
                 formi["jasenkysely"].appendChild(labeli).appendChild(inputti);
         }
-        let nappi = formi["joukkueenKaikkiTiedot"].lastElementChild;
-        nappi.value = "Lisää joukkue";
 }
 
 
@@ -351,11 +349,25 @@ function joukkueenMuokkausTapahtuma(e) {
         inputti.addEventListener("input", lisaaUusiTyhjaJasenlabel);
         formi["jasenkysely"].appendChild(labeli).appendChild(inputti);
 
-        console.log(joukkue, radiot);
-
-        // vaihdetaan nappi "lisää joukkue"-sijasta "muokkaa joukkuetta"-napiksi
+        // tarkistetaan onko "muokkaa joukkuetta"-nappi piilossa
         let nappi = formi["joukkueenKaikkiTiedot"].lastElementChild;
-        nappi.value = "Muokkaa joukkuetta";
+        if (nappi.className == "piilossa") {
+                muutaNapinNakyvyys(nappi);
+        }
+}
+
+/**
+ * Muutetaan annettu nappi piiloon ja vaihdetaan toinen napin näkyvyys tilalle
+ * @param {Input} nappi 
+ */
+function muutaNapinNakyvyys(nappi) {
+        if (nappi.id == "lisaaJoukkueNappi") {
+                nappi.removeAttribute("class");
+                nappi.nextElementSibling.className = "piilossa";
+        } else {
+                nappi.removeAttribute("class");
+                nappi.previousElementSibling.className = "piilossa";
+        }
 }
 
 /** TODO kommentit ja toiminta
