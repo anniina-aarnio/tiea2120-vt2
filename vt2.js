@@ -161,6 +161,8 @@ function luoTyhjaJoukkueenLisays(formi) {
 
         // sarjavalintalista radionappeineen TODO aakkosjärjestys sarjoihin
         let sarjat = document.getElementById("lisaaRastiNappi").sarjat;
+        sarjat = new Map([...sarjat]
+                .sort((a,b) => vertaaKaikkiPienella(a[1].textContent, b[1].textContent)));
         for (let [id,sarja] of sarjat) {
                 // luodaan label ja siihen tekstiksi sarjan nimi
                 let labeli = document.createElement("label");
@@ -444,7 +446,7 @@ function tarkistaRastinOikeellisuus(rastit) {
         return true;
 }
 
-/** TODO toiminta - vai validointi ?
+/** TODO toiminta
  * Tarkistaa, onko lomakkeen sisällöt sellaisia, että ne voi lähettää.
  * Jos ei ole, mitään ei tapahdu.
  * Jos on, luodaan uusi joukkue, lisätään mappiin ja annetaan kutsuvalle
