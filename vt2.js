@@ -13,7 +13,6 @@
 
 reset = false;
 
-
 // tätä funktiota kutsutaan automaattisesti käsiteltävällä datalla
 // älä kutsu tätä itse!
 function start(data) {
@@ -508,30 +507,32 @@ function tyhjennaFormi(forminID) {
  * @param {Event} e 
  */
 function lisaaUusiJasenlabel(e) {
+        let tyhja = false;
+
+        // tämä ilmeisesti rikkoo, kun formin sisällä otetaan tägejä...
         let formi = document.forms["lisaaJoukkue"]["jasenkysely"];
         let inputit = formi.getElementsByTagName("input");
-        // viimeisen tyhjän kentän paikka listassa
-        let viimeinen_tyhja = -1;
 
         // käydään läpi kaikki input-kentät viimeisestä ensimmäiseen
         for (let i = inputit.length-1; i >- 1; i--) {
                 let input = inputit[i];
 
-                // pelkät välilyönnit ei käy nimeksi
-                if (viimeinen_tyhja > -1 && input.value.trim() == "") {
-                        inputit[viimeinen_tyhja].remove();
-                        viimeinen_tyhja = i;
+                // jos on tyhjä ja on jo aiemmin löydetty tyhjä niin poistetaan
+                if (input.value.trim() == "" && tyhja) {
+                        inputit[i].parentNode.remove();
                 }
 
-                // ei ole löydetty vielä yhtään tyhjää, joten otetaan ensimmäinen tyhjä talteen
-                if (viimeinen_tyhja == -1 && input.value.trim() == "") {
-                        viimeinen_tyhja = i;
+                // onko tyhjä?
+                if (input.value.trim() == "") {
+                        tyhja = true;
                 }
+
         }
 
-        // ei ollut tyhjiä kenttiä, joten lisätään yksi
-        if (viimeinen_tyhja == -1) {
-                let uusi = lisaaUusiJasenlabel(inputit.length);
+        // jos ei ollut tyhjiä kenttiä, lisätään yksi
+        if (!tyhja) {
+                let uusi = luoJasenLabelJaInput(inputit.length + 1);
+                uusi.addEventListener("input", lisaaUusiJasenlabel);
                 formi.appendChild(uusi);
         }
 }
