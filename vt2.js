@@ -304,7 +304,6 @@ function joukkueenLisaysTapahtuma(e) {
  * @param {Event} e 
  */
 function joukkueenMuokkausLomake(e) {
-        e.preventDefault();
         // tyhjennetään formi
         tyhjennaFormi("lisaaJoukkue");
 
@@ -330,20 +329,25 @@ function joukkueenMuokkausLomake(e) {
                 }
         }
 
+        let i = 0;
         // täytetään jäsenet oikeilla tiedoilla
         for (let jasen of joukkue.firstChild.childNodes) {
                 let labeli = document.createElement("label");
-                labeli.textContent = "Jäsen";
+                labeli.textContent = "Jäsen " + (i+1);
                 let inputti = document.createElement("input");
                 inputti.setAttribute("type", "text");
                 inputti.addEventListener("input", lisaaUusiTyhjaJasenlabel);
                 inputti.value = jasen.textContent;
+                if (i == 0 || i == 1) {
+                        inputti.setAttribute("required", "required");
+                }
+                i++;
                 formi["jasenkysely"].appendChild(labeli).appendChild(inputti);
         }
 
         // lisätään yksi tyhjä jäsenlabel
         let labeli = document.createElement("label");
-        labeli.textContent = "Jäsen";
+        labeli.textContent = "Jäsen " + (i+1);
         let inputti = document.createElement("input");
         inputti.setAttribute("type", "text");
         inputti.addEventListener("input", lisaaUusiTyhjaJasenlabel);
@@ -393,7 +397,7 @@ function paivitaJoukkuelista(taulukko, joukkueet) {
         luoTaulukonRivit(taulukko, document.getElementById("lisaaSarjaNappi").sarjat, joukkueet);
 }
 
-/** TODO entäs validointi?
+/** 
  * Tarkistaa, onko lomakkeen sisällöt sellaisia että ne voi lähettää.
  * Jos ei ole, mitään ei tapahdu
  * Jos on, luo uuden rastin, lisätään mappiin ja annetaan kutsuvalle

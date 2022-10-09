@@ -46,6 +46,7 @@ form > fieldset label {
 
 form > fieldset label input {
     float: right;
+    padding: 0.1em;
 }
 
 form > fieldset > input {
@@ -58,12 +59,23 @@ form#lisaaJoukkue {
     width: fit-content;
 }
 
-form#lisaaJoukkue > label {
-    padding-left: 1em;
+form#lisaaJoukkue label > input[type="text"] {
+    width: 65%;
+}
+
+fieldset#joukkueenKaikkiTiedot > label {
+    padding: 1em;
+}
+
+
+fieldset#joukkueenKaikkiTiedot {
+    padding-bottom: 4em;
 }
 
 fieldset#sarjakysely {
     width: 18em;
+    padding-right: 1em;
+    padding-bottom: 1em;
 }
 
 fieldset#sarjakysely > label {
@@ -73,6 +85,18 @@ fieldset#sarjakysely > label {
 fieldset#sarjakysely > label input {
     float: right;
 }
+
+fieldset#jasenkysely {
+    margin-bottom: 1em;
+    width: 18em;
+    padding-right: 1em;
+    padding-top: 1em;
+}
+
+fieldset#jasenkysely > label {
+    padding-bottom: 1em;
+}
+
 
 input {
     border: solid #a5a8a4;
