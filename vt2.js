@@ -177,6 +177,14 @@ function luoTyhjaJoukkueenLisays(formi) {
         }
 
         // jäsenluettelon muokkaaminen
+        luoKaksiTyhjaaJasenta(formi);
+}
+
+/**
+ * Luo kaksi tyhjää jäsenlabel + input formin jäsenkyselyyn
+ * @param {Form} formi 
+ */
+function luoKaksiTyhjaaJasenta(formi) {
         for (let i = 0; i < 2; i++) {
                 let labeli = document.createElement("label");
                 labeli.textContent = "Jäsen " + (i+1);
@@ -376,7 +384,6 @@ function joukkueenMuokkausTapahtuma(e) {
         // laitetaan joukkuenoden viite talteen nappiin
         let joukkue = document.forms["lisaaJoukkue"]["joukkueenKaikkiTiedot"].lastElementChild.joukkue;
         
-
         if (tarkistaJoukkueenOikeellisuus(document.forms["lisaaJoukkue"], false)) {
                 paivitaJoukkuelista();
                 tyhjennaFormi("lisaaJoukkue");
@@ -400,23 +407,31 @@ function muutaNapinNakyvyys(nappi) {
 }
 
 /**
- * Luo uuden joukkueen, jossa formissa annetut tiedot.
-
- * Päivittää joukkueen tiedot joukkueet-listaan, dataan ja tulostaulukkoon.
+ * Päivittää joukkueen tiedot tulostaulukkoon.
  */
 function paivitaJoukkuelista() {
         let taulukko = document.getElementById("tulokset");
         let joukkueet = document.getElementById("lisaaRastiNappi").joukkueet;
-        let data = document.getElementById("lisaaRastiNappi").data;
-
-
-
-        // lisää joukkue joukkueisiin ja dataan
 
         // ensin tyhjennä taulukko
+        tyhjennaTaulukko(taulukko);
         
         // luo uusi taulukko
         luoTaulukonRivit(taulukko, document.getElementById("lisaaRastiNappi").sarjat, joukkueet);
+}
+
+/**
+ * Tyhjentää taulukosta kaikki elementit paitsi otsikon ja otsikkorivin
+ * @param {Table} taulukko 
+ */
+function tyhjennaTaulukko(taulukko) {
+        let rivit = taulukko.getElementsByTagName("tr");
+        for (let rivi of rivit) {
+                if (rivi.firstElementChild.getAttribute("tag") == "th") {
+                        continue;
+                }
+                rivi.remove();
+        }
 }
 
 /** 
@@ -466,7 +481,7 @@ function tarkistaRastinOikeellisuus(rastit) {
         return true;
 }
 
-/** TODO toiminta
+/**
  * Tarkistaa, onko lomakkeen sisällöt sellaisia, että ne voi lähettää.
  * Jos ei ole, mitään ei tapahdu.
  * Jos sisällöt sopivia ja luodaanUusiJoukkue = true:
@@ -491,25 +506,23 @@ function tarkistaRastinOikeellisuus(rastit) {
  * @return {Boolean} true, jos sopiva joukkue, false jos ei
  */
 function tarkistaJoukkueenOikeellisuus(formi, luodaanUusiJoukkue) {
-        console.log(formi);
+
 
         // sarjan haku ja tarkistus että 1 valittu ja se löytyy myös datasta
         let sarjaID = "";
-        
+
+        let inputit = formi["sarjakysely"].getElementsByTagName("input");
+        console.log(inputit);
+        for (let input of inputit) {
+
+                if (input.checked) {
+                        sarjaID = input.getAttribute("id");
+                        console.log("sarjaid " + sarjaID);
+                }
+        }
+                
         // jäsenien haku, tarkistus että väh. 2 kpl, kaikki eri nimisiä keskenään
         let jasenet = [];
-        let inputit = formi["sarjakysely"].getElementsByTagName("input");
-
-        for (let input of inputit) {
-                // onko radionappi
-                if (input.getAttribute("type") == "radio") {
-                        if (input.checked) {
-                                sarjaID = input.getAttribute("id");
-                                console.log("sarjaid " + sarjaID);
-                        }
-                }
-
-        }
 
         // tarkista nimen oikeellisuus
         let formissaNimi = document.forms["lisaaJoukkue"]["nimi"].value.trim().toUpperCase();
@@ -518,7 +531,6 @@ function tarkistaJoukkueenOikeellisuus(formi, luodaanUusiJoukkue) {
         // tai muokata vanhaa joukkuetta ja muuttaa se joukkueisiin ja dataan
         let joukkueet = document.getElementById("lisaaRastiNappi").joukkueet;
         let data = document.getElementById("lisaaRastiNappi").data;
-        
         if (luodaanUusiJoukkue) {
                 // tarkistaa nimen oikeellisuuden
                 let formissaNimi = document.forms["lisaaJoukkue"]["nimi"].value.trim().toUpperCase();
@@ -534,7 +546,7 @@ function tarkistaJoukkueenOikeellisuus(formi, luodaanUusiJoukkue) {
                 uusiJoukkue.setAttribute("sarja", sarjaID);
                 console.log(uusiJoukkue);
 
-                let jasenet = data.createElement("jasenet");
+                let jasenetdataan = data.createElement("jasenet");
 
 
                 let rastileimaukset = data.createElement("rastileimaukset");
@@ -600,9 +612,10 @@ function tyhjennaFormi(forminID) {
         if (document.forms[forminID]["jasenkysely"]) {
                 // TODO jos jättää 2 jäljelle niin muokkaajoukkuetta ei toimi
                 let labelit = document.forms[forminID]["jasenkysely"].children;
-                for (let i = labelit.length-1; i >= 1; i--) {
+                for (let i = labelit.length-1; i >= 0; i--) {
                         labelit[i].remove();
                 }
+
 
         }
 }
