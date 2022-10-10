@@ -372,17 +372,19 @@ function joukkueenMuokkausLomake(e) {
 function joukkueenMuokkausTapahtuma(e) {
         let joukkue = document.forms["lisaaJoukkue"]["joukkueenKaikkiTiedot"].lastElementChild.joukkue;
         
-        console.log(e);
+
         
         // tarkista nimen oikeellisuus
-        let nimi = document.forms["lisaaJoukkue"]["nimi"].value;
+        let formissaNimi = document.forms["lisaaJoukkue"]["nimi"].value;
 
         // jos nimi on muutettu ja ei ole uniikki tai tyhjä
-        if (nimi != joukkue.childNodes[3].value) {
-                if (nimi == "") {
+        if (formissaNimi != joukkue.childNodes[3].textContent.trim()) {
+                if (formissaNimi == "") {
+                        console.log("oli tyhjä");
                         return;
                 }
-                if (!onkoUniikki(nimi)) { //TODO
+                if (!onkoUniikkiJoukkueennimi(formissaNimi)) {
+                        console.log("oli olemassa jo");
                         return;
                 }
         }
@@ -589,6 +591,24 @@ function lisaaUusiTyhjaJasenlabel(e) {
 
 
 // ----- OMAT APUFUNKTIOT mm. vertailuun-----
+
+/**
+ * Vertailee nimeä jo olevassa oleviin joukkueiden nimiin
+ * muuttaen molemmat uppercaseksi ja trimiä hyödyntämällä
+ * Palauttaa totuusarvon sen mukaan, onko nimi uniikki vai ei
+ * @param {String} nimi jota verrataan joukkueessa oleviin nimiin
+ * @return {Boolean} true jos on uniikki, false jos nimi on jo jollakin joukkueella
+ */
+function onkoUniikkiJoukkueennimi(nimi) {
+        let verrattava = nimi.trim().toUpperCase();
+        let joukkueennimet = document.getElementById("lisaaRastiNappi").joukkueet;
+        for (let jnimi of joukkueennimet.keys()) {
+                if (verrattava === jnimi.trim().toUpperCase()) {
+                        return false;
+                }
+        }
+        return true;
+}
 
 /**
  * Vertaa kahta annettua merkkijonoa:
