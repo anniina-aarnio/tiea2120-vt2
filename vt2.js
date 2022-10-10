@@ -619,13 +619,13 @@ function tarkistaJoukkueenOikeellisuus(formi, luodaanUusiJoukkue) {
                 }
 
                 // joukkueen muutokset
-                let jasenetdataan = data.createElement("jasenet");
+/*                 let jasenetdataan = data.createElement("jasenet");
                 for (let jasen of jasenet) {
                         let uusijasen = data.createElement("jasen");
                         uusijasen.textContent = jasen;
                         jasenetdataan.appendChild(uusijasen);
                 }
-                joukkue.appendChild(jasenetdataan);
+                joukkue.appendChild(jasenetdataan); */
         }
 
         savedata(data);
