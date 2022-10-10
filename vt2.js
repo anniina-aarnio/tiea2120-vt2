@@ -595,10 +595,17 @@ function tarkistaJoukkueenOikeellisuus(formi, luodaanUusiJoukkue) {
                 alaleimaustapa.textContent = gpsindeksi;
                 uusiJoukkue.appendChild(leimaustapa).appendChild(alaleimaustapa);
 
+                // uuteen joukkueeseen nimi
                 let nimi = data.createElement("nimi");
+                nimi.textContent = formissaNimi;
                 uusiJoukkue.appendChild(nimi);
+
+                joukkueet.set(formissaNimi, uusiJoukkue);
+                let paikka = data.getElementsByTagName("joukkueet");
+                paikka[0].appendChild(uusiJoukkue);
                 console.log(uusiJoukkue);
         } else {
+                // TODO MUOKKAUKSET EIVÄT TOIMI OIKEIN
                 // muokattava joukkue
                 let joukkue = document.forms["lisaaJoukkue"]["joukkueenKaikkiTiedot"].lastElementChild.joukkue;
                 // jos nimi on muutettu ja ei ole uniikki tai tyhjä
@@ -612,8 +619,16 @@ function tarkistaJoukkueenOikeellisuus(formi, luodaanUusiJoukkue) {
                 }
 
                 // joukkueen muutokset
+                let jasenetdataan = data.createElement("jasenet");
+                for (let jasen of jasenet) {
+                        let uusijasen = data.createElement("jasen");
+                        uusijasen.textContent = jasen;
+                        jasenetdataan.appendChild(uusijasen);
+                }
+                joukkue.appendChild(jasenetdataan);
         }
 
+        savedata(data);
         
         return true;
 
