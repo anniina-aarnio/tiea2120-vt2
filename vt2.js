@@ -566,7 +566,7 @@ function tarkistaJoukkueenOikeellisuus(formi, luodaanUusiJoukkue) {
                 uusiJoukkue.setAttribute("matka", "0");
                 uusiJoukkue.setAttribute("sarja", sarjaID);
 
-
+                // uuteen joukkueeseen jäsenet
                 let jasenetdataan = data.createElement("jasenet");
                 for (let jasen of jasenet) {
                         let uusijasen = data.createElement("jasen");
@@ -575,11 +575,25 @@ function tarkistaJoukkueenOikeellisuus(formi, luodaanUusiJoukkue) {
                 }
                 uusiJoukkue.appendChild(jasenetdataan);
 
+                // uuteen joukkueeseen rastileimaukset, oletuksena tyhjä
                 let rastileimaukset = data.createElement("rastileimaukset");
                 uusiJoukkue.appendChild(rastileimaukset);
 
+                // uuteen joukkueeseen leimaustapa, oletuksena GPS
+                let gpsindeksi = "";
+                let kohta = data.documentElement.getElementsByTagName("leimaustavat");
+                let leimaustavat = kohta[0].getElementsByTagName("leimaustapa");
+
+                for (let i = 0; i < leimaustavat.length; i++) {
+                        if (leimaustavat[i].textContent.toUpperCase() == "GPS") {
+                                gpsindeksi = i;
+                                break;
+                        }
+                }
                 let leimaustapa = data.createElement("leimaustapa");
-                uusiJoukkue.appendChild(leimaustapa);
+                let alaleimaustapa = data.createElement("leimaustapa");
+                alaleimaustapa.textContent = gpsindeksi;
+                uusiJoukkue.appendChild(leimaustapa).appendChild(alaleimaustapa);
 
                 let nimi = data.createElement("nimi");
                 uusiJoukkue.appendChild(nimi);
