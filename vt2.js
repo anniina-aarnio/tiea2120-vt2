@@ -289,10 +289,16 @@ function rastinLisaysTapahtuma(e) {
  * @param {Event} e 
  */
 function joukkueenLisaysTapahtuma(e) {
-        e.preventDefault();
         let joukkueet = document.getElementById("lisaaRastiNappi").joukkueet;
-        if (tarkistaJoukkueenOikeellisuus(joukkueet)) {
-                paivitaJoukkuelista(document.getElementById("tulokset"), joukkueet);
+
+        // tarkistaa nimen oikeellisuuden
+        let formissaNimi = document.forms["lisaaJoukkue"]["nimi"].value.trim().toUpperCase();
+        if (formissaNimi == "" || !onkoUniikkiJoukkueennimi(formissaNimi)) {
+                return;
+        }
+
+        if (tarkistaJoukkueenOikeellisuus(document.forms["lisaaJoukkue"])) {
+                paivitaJoukkuelista();
                 tyhjennaFormi("lisaaJoukkue");
         }
 }
@@ -375,23 +381,22 @@ function joukkueenMuokkausTapahtuma(e) {
 
         
         // tarkista nimen oikeellisuus
-        let formissaNimi = document.forms["lisaaJoukkue"]["nimi"].value;
+        let formissaNimi = document.forms["lisaaJoukkue"]["nimi"].value.trim().toUpperCase();
 
         // jos nimi on muutettu ja ei ole uniikki tai tyhjä
-        if (formissaNimi != joukkue.childNodes[3].textContent.trim()) {
+        if (formissaNimi != joukkue.childNodes[3].textContent.trim().toUpperCase()) {
                 if (formissaNimi == "") {
-                        console.log("oli tyhjä");
                         return;
                 }
                 if (!onkoUniikkiJoukkueennimi(formissaNimi)) {
-                        console.log("oli olemassa jo");
                         return;
                 }
         }
-        tarkistaJoukkueenOikeellisuus(document.forms["lisaaJoukkue"]);
-
-
-
+        
+        if (tarkistaJoukkueenOikeellisuus(document.forms["lisaaJoukkue"])) {
+                paivitaJoukkuelista();
+                tyhjennaFormi("lisaaJoukkue");
+        }
 }
 
 /**
@@ -409,16 +414,24 @@ function muutaNapinNakyvyys(nappi) {
         }
 }
 
-/** TODO kommentit ja toiminta
- * 
- * @param {Node} taulukko 
- * @param {Map} joukkueet 
+/**
+ * Luo uuden joukkueen, jossa formissa annetut tiedot.
+
+ * Päivittää joukkueen tiedot joukkueet-listaan, dataan ja tulostaulukkoon.
  */
-function paivitaJoukkuelista(taulukko, joukkueet) {
+function paivitaJoukkuelista() {
+        let taulukko = document.getElementById("tulokset");
+        let joukkueet = document.getElementById("lisaaRastiNappi").joukkueet;
+        let data = document.getElementById("lisaaRastiNappi").data;
+
+
+
+        // lisää joukkue joukkueisiin ja dataan
+
         // ensin tyhjennä taulukko
         
         // luo uusi taulukko
-        luoTaulukonRivit(taulukko, document.getElementById("lisaaSarjaNappi").sarjat, joukkueet);
+        luoTaulukonRivit(taulukko, document.getElementById("lisaaRastiNappi").sarjat, joukkueet);
 }
 
 /** 
@@ -486,6 +499,7 @@ function tarkistaRastinOikeellisuus(rastit) {
  * - matka (oletuksena 0)
  * - pisteet (oletuksena 0)
  * @param {Form} formi 
+ * @return {Boolean} true, jos sopiva joukkue, false jos ei
  */
 function tarkistaJoukkueenOikeellisuus(formi) {
         // inputtien sisällöt
@@ -493,12 +507,22 @@ function tarkistaJoukkueenOikeellisuus(formi) {
 
         let jasenet = [];
 
-        // jos menee läpi:
-        // tarkistaa kummasta napista kyse ja vaihtaa sopivaksi
 
-        // muokkaa joukkue: vaihtaa napin lisää joukkue
+        if (!onOK) {
+                return false;
+        }
 
-        // lisää joukkue: ei muutoksia
+        // kaikki kunnossa joten voidaan luoda uusi joukkue ja lisätä joukkueisiin ja dataan
+        let joukkueet = document.getElementById("lisaaRastiNappi").joukkueet;
+        let data = document.getElementById("lisaaRastiNappi").data;
+
+        // luo uusi joukkue
+        let uusiJoukkue = data.createElement("joukkue");
+        uusiJoukkue.setAttribute("aika", "00:00:00");
+        uusiJoukkue.setAttribute("pisteet", "0");
+        uusiJoukkue.setAttribute("matka", "0");
+        
+
 }
 
 /**
