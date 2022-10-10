@@ -520,9 +520,31 @@ function tarkistaJoukkueenOikeellisuus(formi, luodaanUusiJoukkue) {
                         console.log("sarjaid " + sarjaID);
                 }
         }
+        if (sarjaID == "") {
+                return false;
+        }
                 
         // jäsenien haku, tarkistus että väh. 2 kpl, kaikki eri nimisiä keskenään
         let jasenet = [];
+        let forminJasenet = formi["jasenkysely"].elements;
+
+        for (let jasen of forminJasenet) {
+                if (jasen.value.trim() != "") {
+                        jasenet.push(jasen.value.trim());
+                } 
+        }
+        // jos jäseniä alle 2
+        if (jasenet.length < 2) {
+                return false;
+        }
+        // jos kaksi samannimistä jäsentä
+        for (let i = 0; i < jasenet.length - 1; i++) {
+                for (let j = 1; j < jasenet.length; j++) {
+                        if (jasenet[i].toUpperCase() == jasenet[j].toUpperCase()) {
+                                return false;
+                        }
+                }
+        }
 
         // tarkista nimen oikeellisuus
         let formissaNimi = document.forms["lisaaJoukkue"]["nimi"].value.trim().toUpperCase();
@@ -537,7 +559,7 @@ function tarkistaJoukkueenOikeellisuus(formi, luodaanUusiJoukkue) {
                  if (formissaNimi == "" || !onkoUniikkiJoukkueennimi(formissaNimi)) {
                         return false;
                 }
-
+                // nyt kaikki kunnossa joten:
                 // luo uusi joukkue
                 let uusiJoukkue = data.createElement("joukkue");
                 uusiJoukkue.setAttribute("aika", "00:00:00");
