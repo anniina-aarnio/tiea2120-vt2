@@ -539,10 +539,9 @@ function tarkistaJoukkueenOikeellisuus(formi, luodaanUusiJoukkue) {
         }
         // jos kaksi samannimistä jäsentä
         for (let i = 0; i < jasenet.length - 1; i++) {
-                for (let j = 1; j < jasenet.length; j++) {
-                        if (jasenet[i].toUpperCase() == jasenet[j].toUpperCase()) {
-                                return false;
-                        }
+                let j = i+1;
+                if (jasenet[i].toUpperCase() == jasenet[j].toUpperCase()) {
+                        return false;
                 }
         }
 
@@ -566,18 +565,25 @@ function tarkistaJoukkueenOikeellisuus(formi, luodaanUusiJoukkue) {
                 uusiJoukkue.setAttribute("pisteet", "0");
                 uusiJoukkue.setAttribute("matka", "0");
                 uusiJoukkue.setAttribute("sarja", sarjaID);
-                console.log(uusiJoukkue);
+
 
                 let jasenetdataan = data.createElement("jasenet");
-
+                for (let jasen of jasenet) {
+                        let uusijasen = data.createElement("jasen");
+                        uusijasen.textContent = jasen;
+                        jasenetdataan.appendChild(uusijasen);
+                }
+                uusiJoukkue.appendChild(jasenetdataan);
 
                 let rastileimaukset = data.createElement("rastileimaukset");
-
+                uusiJoukkue.appendChild(rastileimaukset);
 
                 let leimaustapa = data.createElement("leimaustapa");
-
+                uusiJoukkue.appendChild(leimaustapa);
 
                 let nimi = data.createElement("nimi");
+                uusiJoukkue.appendChild(nimi);
+                console.log(uusiJoukkue);
         } else {
                 // muokattava joukkue
                 let joukkue = document.forms["lisaaJoukkue"]["joukkueenKaikkiTiedot"].lastElementChild.joukkue;
